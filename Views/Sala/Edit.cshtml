@@ -9,27 +9,34 @@
 <form asp-action="Edit" method="post">
     <input type="hidden" asp-for="Id" />
 
-    <div class="form-group mb-3">
-        <label>Nombre</label>
+    <div class="mb-3">
+        <label asp-for="Nombre" class="form-label"></label>
         <input asp-for="Nombre" class="form-control" />
-        <span class="text-danger" asp-validation-for="Nombre"></span>
+        <span asp-validation-for="Nombre" class="text-danger"></span>
     </div>
 
-    <div class="form-group mb-3">
-        <label>Ubicación</label>
+    <div class="mb-3">
+        <label asp-for="Ubicacion" class="form-label"></label>
         <input asp-for="Ubicacion" class="form-control" />
+        <span asp-validation-for="Ubicacion" class="text-danger"></span>
     </div>
 
-    <div class="form-group mb-3">
-        <label>Estado</label>
+    <div class="mb-3">
+        <label asp-for="Estado" class="form-label"></label>
         <input asp-for="Estado" class="form-control" />
+        <span asp-validation-for="Estado" class="text-danger"></span>
     </div>
 
-    <div class="form-group mb-3">
-        <label>Capacidad</label>
-        <input asp-for="Capacidad" type="number" class="form-control" />
+    <div class="mb-3">
+        <label asp-for="Capacidad" class="form-label"></label>
+        <input asp-for="Capacidad" class="form-control" />
+        <span asp-validation-for="Capacidad" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-warning">Actualizar</button>
-    <a class="btn btn-secondary" href="/Sala/Index">Cancelar</a>
+    <button type="submit" class="btn btn-success">Guardar Cambios</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
