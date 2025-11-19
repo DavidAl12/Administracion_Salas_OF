@@ -1,0 +1,37 @@
+﻿
+@model IEnumerable<Domain.Sala>
+
+@{
+    ViewData["Title"] = "Listado de Salas";
+}
+
+<h2>Salas</h2>
+
+<a class="btn btn-primary mb-3" href="/Sala/Create">Crear Nueva Sala</a>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Ubicación</th>
+            <th>Estado</th>
+            <th>Capacidad</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var sala in Model)
+        {
+            <tr>
+                <td>@sala.Nombre</td>
+                <td>@sala.Ubicacion</td>
+                <td>@sala.Estado</td>
+                <td>@sala.Capacidad</td>
+                <td>
+                    <a class="btn btn-warning" href="/Sala/Edit/@sala.Id">Editar</a>
+                    <a class="btn btn-danger" href="/Sala/Delete/@sala.Id">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,22 @@
+﻿@model Domain.Sala
+
+
+@{
+    ViewData["Title"] = "Eliminar Sala";
+}
+
+<h2>¿Seguro que quieres eliminar esta sala?</h2>
+
+<div class="card p-3 mt-3">
+    <p><strong>Nombre:</strong> @Model.Nombre</p>
+    <p><strong>Ubicación:</strong> @Model.Ubicacion</p>
+    <p><strong>Estado:</strong> @Model.Estado</p>
+    <p><strong>Capacidad:</strong> @Model.Capacidad</p>
+</div>
+
+<form asp-action="DeleteConfirm" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <button type="submit" class="btn btn-danger">Eliminar</button>
+    <a href="/Sala/Index" class="btn btn-secondary">Cancelar</a>
+</form>
