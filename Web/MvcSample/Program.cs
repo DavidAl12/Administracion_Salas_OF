@@ -5,14 +5,14 @@ using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Services;
 using Services.Automapper;
-using Domain; // Para la clase Usuario
-using Microsoft.AspNetCore.Identity; // 🔹 AJUSTE: para UserManager en el seed
+using Domain;
+using Microsoft.AspNetCore.Identity;
 
 namespace MvcSample
 {
     public class Program
     {
-        public static async Task Main(string[] args)  // 🔹 AJUSTE: async para poder usar await en el seed
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
             var _configuration = builder.Configuration;
@@ -27,14 +27,14 @@ namespace MvcSample
                 options.UseSqlServer(connectionString);
             });
 
-            // IDENTITY FRAMEWORK CON USUARIO PERSONALIZADO
+            // IDENTITY FRAMEWORK
             builder.Services.AddDefaultIdentity<Usuario>(options =>
             {
-                options.SignIn.RequireConfirmedAccount = false; // Sin correo
+                options.SignIn.RequireConfirmedAccount = false;
             })
             .AddEntityFrameworkStores<AppDbContext>();
 
-            // REGISTRO DE REPOSITORIOS Y SERVICIOS
+            // REPOSITORIOS Y SERVICIOS
             builder.Services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
             builder.Services.AddScoped<ISalaService, SalaService>();
             builder.Services.AddRepositories(_configuration);
@@ -54,7 +54,7 @@ namespace MvcSample
 
             builder.Services.AddControllersWithViews();
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-            builder.Services.AddRazorPages(); // necesario para Razor Pages de Identity
+            builder.Services.AddRazorPages(); // necesario para Identity
 
             var app = builder.Build();
 
@@ -73,25 +73,26 @@ namespace MvcSample
             app.UseStaticFiles();
             app.UseRouting();
 
-            app.UseAuthentication();  // 🔹 AJUSTE: necesario para Identity
+            app.UseAuthentication();
             app.UseAuthorization();
             app.UseCors("CORS_Policy");
 
+            // 🔹 MUY IMPORTANTE: PÁGINA INICIAL = Home/Index
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}"
             );
 
-            app.MapRazorPages();
+            app.MapRazorPages(); // Identity
 
-            // 🔹 AJUSTE: SEED de usuario administrador inicial
+            // SEED ADMIN
             using (var scope = app.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
                 var userManager = services.GetRequiredService<UserManager<Usuario>>();
 
                 var adminEmail = "admin@correo.com";
-                var adminPassword = "Admin123$"; // cámbialo luego
+                var adminPassword = "Admin123$";
 
                 var adminUser = await userManager.FindByEmailAsync(adminEmail);
                 if (adminUser == null)
@@ -104,9 +105,7 @@ namespace MvcSample
                         Rol = "Admin"
                     };
 
-                    var result = await userManager.CreateAsync(adminUser, adminPassword);
-
-                    // Si luego quieres integrar roles de Identity (AspNetRoles), aquí puedes añadirlo.
+                    await userManager.CreateAsync(adminUser, adminPassword);
                 }
             }
 
