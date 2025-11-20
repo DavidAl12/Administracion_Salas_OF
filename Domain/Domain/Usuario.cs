@@ -16,5 +16,7 @@ namespace Domain
         public ICollection<PrestamoSala> PrestamosSala { get; set; }
         public ICollection<Reporte> Reportes { get; set; }
         public ICollection<Asesoria> Asesorias { get; set; }
+
+        public DateTime FechaRegistro { get; set; } = DateTime.Now;
     }
 }

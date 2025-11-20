@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Domain.Equipo>
+
+<h2 class="fw-bold mb-4">Listado de Equipos</h2>
+
+<a class="btn btn-primary mb-3" href="/Equipo/Create">Registrar Equipo</a>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Serial</th>
+            <th>Sala</th>
+            <th>Especificaciones</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var eq in Model)
+        {
+            <tr>
+                <td>@eq.Serial</td>
+                <td>@eq.Sala?.Nombre</td>
+                <td>@eq.Especificaciones</td>
+                <td>@eq.Estado</td>
+                <td>
+                    <a class="btn btn-warning btn-sm" href="/Equipo/Edit/@eq.Id">Editar</a>
+                    <a class="btn btn-danger btn-sm" href="/Equipo/Delete/@eq.Id">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

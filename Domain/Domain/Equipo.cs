@@ -7,16 +7,14 @@ namespace Domain
     {
         public int Id { get; set; }
 
-        [Required, StringLength(100)]
         public string Serial { get; set; }
 
-        [StringLength(50)]
-        public string Estado { get; set; }
+        public string Especificaciones { get; set; }
 
-        public int? SalaId { get; set; }
+        public string Estado { get; set; } = "Disponible";
+
+        public int SalaId { get; set; }
         public Sala Sala { get; set; }
-
-        public ICollection<PrestamoEquipo> PrestamosEquipo { get; set; }
-        public ICollection<Reporte> Reportes { get; set; }
     }
+
 }

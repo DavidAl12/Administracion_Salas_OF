@@ -1,0 +1,29 @@
+﻿@model Domain.Equipo
+
+<h2 class="fw-bold">Registrar Equipo</h2>
+
+<form method="post">
+
+    <div class="mb-3">
+        <label>Serial del Equipo</label>
+        <input class="form-control" asp-for="Serial" required />
+    </div>
+
+    <div class="mb-3">
+        <label>Especificaciones</label>
+        <textarea class="form-control" asp-for="Especificaciones"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label>Sala</label>
+        <select class="form-control" asp-for="SalaId">
+            @foreach (var sala in ViewBag.Salas)
+            {
+                <option value="@sala.Id">@sala.Nombre</option>
+            }
+        </select>
+    </div>
+
+    <button class="btn btn-primary">Guardar</button>
+    <a class="btn btn-secondary" href="/Equipo">Volver</a>
+</form>

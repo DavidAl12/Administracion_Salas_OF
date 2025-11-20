@@ -16,13 +16,19 @@ namespace MvcSample.Areas.Identity.Pages.Account
     {
         // 🔹 usa tu tipo Usuario
         private readonly SignInManager<Usuario> _signInManager;
+        private readonly UserManager<Usuario> _userManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<Usuario> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(
+    SignInManager<Usuario> signInManager,
+    UserManager<Usuario> userManager,
+    ILogger<LoginModel> logger)
         {
             _signInManager = signInManager;
+            _userManager = userManager;
             _logger = logger;
         }
+
 
         [BindProperty]
         public InputModel Input { get; set; }
@@ -67,43 +73,38 @@ namespace MvcSample.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
             if (ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(
-                    Input.Email,
-                    Input.Password,
-                    Input.RememberMe,
-                    lockoutOnFailure: false);
+                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
 
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User logged in.");
+                    var usuario = await _userManager.FindByEmailAsync(Input.Email);
 
-                    // 🔹 AJUSTE: Redirige siempre al listado de salas tras el login exitoso
-                    return RedirectToAction("Index", "Sala");
+                    // REDIRECCIÓN SEGÚN ROL
+                    if (usuario.Rol == "Admin")
+                        return RedirectToAction("Dashboard", "Admin");
 
-                    // Si quisieras usar returnUrl solo si viene de una página protegida y si no, a Sala:
-                    // if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
-                    //     return LocalRedirect(returnUrl);
-                    // return RedirectToAction("Index", "Sala");
+                    if (usuario.Rol == "Coordinador")
+                        return RedirectToAction("Index", "Coordinador");
+
+                    return RedirectToAction("Index", "Home");
                 }
-                if (result.RequiresTwoFactor)
-                {
-                    return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
-                }
+
                 if (result.IsLockedOut)
                 {
-                    _logger.LogWarning("User account locked out.");
                     return RedirectToPage("./Lockout");
                 }
-
-                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Intento de inicio de sesión inválido.");
+                    return Page();
+                }
             }
 
-            // algo falló, se re‑muestra el formulario
             return Page();
         }
+
     }
 }

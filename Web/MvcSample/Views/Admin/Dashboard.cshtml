@@ -1,0 +1,86 @@
+﻿@{
+    ViewData["Title"] = "Panel de Administración";
+}
+
+<div class="container mt-4">
+
+    <h2 class="fw-bold">Panel de Administración</h2>
+    <p class="text-muted">Gestiona salas, equipos y usuarios del sistema</p>
+
+    <!-- pestañas -->
+    <ul class="nav nav-tabs mb-4 mt-3">
+        <li class="nav-item">
+            <button class="nav-link active">Resumen</button>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/Sala">Salas</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/Equipo">Equipos</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/Usuarios">Usuarios</a>
+        </li>
+    </ul>
+
+    <!-- tarjetas -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm p-3">
+                <h5 class="fw-bold">Salas Activas</h5>
+                <h2>@ViewBag.SalasActivas</h2>
+                <small>De @ViewBag.TotalSalas salas totales</small>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm p-3">
+                <h5 class="fw-bold">Equipos Disponibles</h5>
+                <h2>@ViewBag.EquiposDisponibles</h2>
+                <small>De @ViewBag.TotalEquipos equipos totales</small>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm p-3">
+                <h5 class="fw-bold">Usuarios Registrados</h5>
+                <h2>@ViewBag.TotalUsuarios</h2>
+            </div>
+        </div>
+    </div>
+
+    <!-- Acceso rápido -->
+    <h4 class="fw-bold mt-4">Acceso Rápido</h4>
+    <p class="text-muted mb-3">Acciones principales del administrador</p>
+
+    <div class="row">
+
+        <div class="col-md-4">
+            <a href="/Sala" class="text-decoration-none">
+                <div class="card shadow-sm p-4">
+                    <h5 class="fw-bold">Gestionar Salas</h5>
+                    <small>CRUD de salas de cómputo</small>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-4">
+            <a href="/Equipo" class="text-decoration-none">
+                <div class="card shadow-sm p-4">
+                    <h5 class="fw-bold">Gestionar Equipos</h5>
+                    <small>CRUD de equipos de cómputo</small>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-4">
+            <a href="/Usuarios" class="text-decoration-none">
+                <div class="card shadow-sm p-4">
+                    <h5 class="fw-bold">Gestionar Usuarios</h5>
+                    <small>CRUD y asignación de roles</small>
+                </div>
+            </a>
+        </div>
+
+    </div>
+</div>
