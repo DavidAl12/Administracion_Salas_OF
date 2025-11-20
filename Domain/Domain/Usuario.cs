@@ -10,18 +10,14 @@ namespace Domain
         [Required, StringLength(100)]
         public string Nombre { get; set; }
 
-        [Required, EmailAddress]
-        public string Email { get; set; }
+        // Identity se encargará de Email & Password
 
         [Required]
-        public string PasswordHash { get; set; }
+        public string Rol { get; set; } // Normal | Coordinador | Administrador
 
-        [Required]
-        public string Rol { get; set; }
-
-        public ICollection<PrestamoEquipo> PrestamosEquipo { get; set; }
-        public ICollection<PrestamoSala> PrestamosSala { get; set; }
-        public ICollection<Reporte> Reportes { get; set; }
-        public ICollection<Asesoria> Asesorias { get; set; }
+        public ICollection<PrestamoEquipo>? PrestamosEquipo { get; set; } = new List<PrestamoEquipo>();
+        public ICollection<PrestamoSala>? PrestamosSala { get; set; } = new List<PrestamoSala>();
+        public ICollection<Reporte>? Reportes { get; set; } = new List<Reporte>();
+        public ICollection<Asesoria>? Asesorias { get; set; } = new List<Asesoria>();
     }
 }

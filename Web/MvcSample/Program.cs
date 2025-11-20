@@ -13,7 +13,10 @@ namespace MvcSample
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddSession();
+
             var _configuration = builder.Configuration;
+
 
             Console.WriteLine("====== CADENA DE CONEXIÓN CARGADA ======");
             Console.WriteLine(_configuration.GetConnectionString("DefaultConnection"));
@@ -79,6 +82,7 @@ namespace MvcSample
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+            app.UseSession();
             app.UseRouting();
 
             app.UseAuthorization();

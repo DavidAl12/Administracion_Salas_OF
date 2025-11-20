@@ -90,5 +90,15 @@ namespace MvcSample.Controllers
             TempData["success"] = "Sala eliminada correctamente";
             return RedirectToAction(nameof(Index));
         }
+
+        public async Task<IActionResult> Disponibles()
+        {
+            var salas = await _salaService.ObtenerTodasAsync();
+
+            var disponibles = salas.Where(s => s.Estado == "Disponible");
+
+            return View(disponibles);
+        }
+
     }
 }

@@ -13,8 +13,10 @@ namespace Domain
         [StringLength(200)]
         public string Ubicacion { get; set; }
 
-        [StringLength(50)]
-        public string Estado { get; set; } // "Libre", "Ocupada", "Mantenimiento"
+        [Required]
+        [RegularExpression("Disponible|Ocupada|Mantenimiento", ErrorMessage = "Estado inválido.")]
+        public string Estado { get; set; }
+
 
         public int Capacidad { get; set; }
 
