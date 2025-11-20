@@ -9,7 +9,7 @@ namespace Domain
         [Required, StringLength(100)]
         public string Nombre { get; set; }
 
-        [Required]
+        [Required]                  // se usa para distinguir Admin / User, etc.
         public string Rol { get; set; }
 
         public ICollection<PrestamoEquipo> PrestamosEquipo { get; set; }
