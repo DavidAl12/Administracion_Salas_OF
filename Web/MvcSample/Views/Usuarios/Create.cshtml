@@ -1,28 +1,33 @@
-﻿<h2 class="fw-bold mb-4">Crear Usuario</h2>
+﻿@model Domain.Usuario
 
-<form method="post">
+<h2 class="fw-bold mb-4">Crear Usuario</h2>
+
+<form asp-action="Create" asp-controller="Usuarios" method="post">
+
+    <div asp-validation-summary="All" class="text-danger"></div>
 
     <a class="btn btn-secondary mt-3" href="/Admin/Dashboard">Volver</a>
 
-
     <div class="mb-3">
         <label>Nombre</label>
-        <input name="nombre" class="form-control" required />
+        <input asp-for="Nombre" class="form-control" />
+        <span asp-validation-for="Nombre" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
         <label>Email</label>
-        <input name="email" type="email" class="form-control" required />
+        <input asp-for="Email" type="email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
         <label>Contraseña</label>
-        <input name="password" type="password" class="form-control" required />
+        <input name="password" type="password" class="form-control" />
     </div>
 
     <div class="mb-3">
         <label>Rol</label>
-        <select name="rol" class="form-control" required>
+        <select asp-for="Rol" class="form-control">
             <option value="Usuario">Usuario</option>
             <option value="Coordinador">Coordinador</option>
             <option value="Admin">Administrador</option>
@@ -31,10 +36,13 @@
 
     <div class="mb-3">
         <label>Fecha Registro</label>
-        <input name="fechaRegistro" type="date" class="form-control" required />
+        <input asp-for="FechaRegistro" type="date" class="form-control" />
     </div>
 
-    <button class="btn btn-success">Guardar</button>
+    <button class="btn btn-success" type="submit">Guardar</button>
     <a class="btn btn-secondary" href="/Usuarios">Volver</a>
-
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

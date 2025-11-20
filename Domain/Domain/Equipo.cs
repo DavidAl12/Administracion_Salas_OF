@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain
 {
@@ -7,18 +6,17 @@ namespace Domain
     {
         public int Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "El serial es obligatorio")]
         public string Serial { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Las especificaciones son obligatorias")]
         public string Especificaciones { get; set; }
 
         public string Estado { get; set; } = "Disponible";
 
-        [Required]
+        [Required(ErrorMessage = "Debe seleccionar una sala")]
         public int SalaId { get; set; }
 
-        [ForeignKey("SalaId")]
         public Sala Sala { get; set; }
     }
 }
