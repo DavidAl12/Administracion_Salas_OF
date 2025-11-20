@@ -2,6 +2,9 @@
 
 <form method="post">
 
+    <a class="btn btn-secondary mt-3" href="/Admin/Dashboard">Volver</a>
+
+
     <div class="mb-3">
         <label>Nombre</label>
         <input name="nombre" class="form-control" required />
@@ -9,12 +12,12 @@
 
     <div class="mb-3">
         <label>Email</label>
-        <input name="email" class="form-control" type="email" required />
+        <input name="email" type="email" class="form-control" required />
     </div>
 
     <div class="mb-3">
         <label>Contraseña</label>
-        <input name="password" class="form-control" type="password" required />
+        <input name="password" type="password" class="form-control" required />
     </div>
 
     <div class="mb-3">
@@ -26,6 +29,12 @@
         </select>
     </div>
 
+    <div class="mb-3">
+        <label>Fecha Registro</label>
+        <input name="fechaRegistro" type="date" class="form-control" required />
+    </div>
+
     <button class="btn btn-success">Guardar</button>
     <a class="btn btn-secondary" href="/Usuarios">Volver</a>
+
 </form>

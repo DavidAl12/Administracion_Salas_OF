@@ -24,7 +24,8 @@ namespace MvcSample.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(string nombre, string email, string password, string rol)
+        [HttpPost]
+        public async Task<IActionResult> Create(string nombre, string email, string password, string rol, DateTime fechaRegistro)
         {
             var usr = new Usuario
             {
@@ -32,7 +33,7 @@ namespace MvcSample.Controllers
                 UserName = email,
                 Email = email,
                 Rol = rol,
-                FechaRegistro = DateTime.Now
+                FechaRegistro = fechaRegistro
             };
 
             var result = await _userManager.CreateAsync(usr, password);
@@ -43,5 +44,6 @@ namespace MvcSample.Controllers
             ViewBag.Error = result.Errors.First().Description;
             return View();
         }
+
     }
 }

@@ -19,12 +19,8 @@ namespace Domain
         public int Capacidad { get; set; }
 
         // Campo opcional.
-        public int? ResponsableId { get; set; }
+        public string? Responsable { get; set; } = "-----";
 
-        // Campo opcional (NO requerido)
-        public Usuario? Responsable { get; set; }
-
-        // Estas colecciones deben ser opcionales porque no existen al crear
         public ICollection<Equipo>? Equipos { get; set; } = new List<Equipo>();
         public ICollection<PrestamoSala>? PrestamosSala { get; set; } = new List<PrestamoSala>();
         public ICollection<Reporte>? Reportes { get; set; } = new List<Reporte>();

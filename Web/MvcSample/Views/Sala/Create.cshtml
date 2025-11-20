@@ -1,36 +1,41 @@
 ﻿@model Domain.Sala
 
+<h2 class="fw-bold mb-4">Registrar Sala</h2>
 
-@{
-    ViewData["Title"] = "Crear Sala";
-}
+<form method="post">
 
-<h2>Crear Sala</h2>
+    <a class="btn btn-secondary mt-3" href="/Admin/Dashboard">Volver</a>
 
-<div asp-validation-summary="All" class="text-danger"></div>
 
-<form asp-action="Create" method="post">
-    <div class="form-group mb-3">
-        <label>Nombre</label>
-        <input asp-for="Nombre" class="form-control" />
-        <span class="text-danger" asp-validation-for="Nombre"></span>
+    <div class="mb-3">
+        <label>Nombre de la Sala</label>
+        <input asp-for="Nombre" class="form-control" required />
     </div>
 
-    <div class="form-group mb-3">
+    <div class="mb-3">
         <label>Ubicación</label>
-        <input asp-for="Ubicacion" class="form-control" />
+        <input asp-for="Ubicacion" class="form-control" required />
     </div>
 
-    <div class="form-group mb-3">
-        <label>Estado</label>
-        <input asp-for="Estado" class="form-control" />
-    </div>
-
-    <div class="form-group mb-3">
+    <div class="mb-3">
         <label>Capacidad</label>
-        <input asp-for="Capacidad" type="number" class="form-control" />
+        <input asp-for="Capacidad" class="form-control" type="number" required />
     </div>
 
-    <button type="submit" class="btn btn-success">Guardar</button>
-    <a class="btn btn-secondary" href="/Sala/Index">Cancelar</a>
+    <div class="mb-3">
+        <label>Estado</label>
+        <select asp-for="Estado" class="form-control" required>
+            <option value="Disponible">Disponible</option>
+            <option value="Ocupada">Ocupada</option>
+            <option value="En mantenimiento">En mantenimiento</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label>Responsable (opcional)</label>
+        <input asp-for="Responsable" class="form-control" placeholder="-----" />
+    </div>
+
+    <button class="btn btn-primary">Guardar</button>
+    <a class="btn btn-secondary" href="/Admin/Dashboard">Volver</a>
 </form>

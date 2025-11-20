@@ -1,0 +1,13 @@
+﻿@model Domain.Equipo
+
+<a class="btn btn-secondary mt-3" href="/Admin/Dashboard">Volver</a>
+
+
+<h2 class="fw-bold mb-4">Eliminar Equipo</h2>
+
+<p>¿Seguro que deseas eliminar el equipo <strong>@Model.Serial</strong>?</p>
+
+<form method="post">
+    <button class="btn btn-danger">Eliminar</button>
+    <a class="btn btn-secondary" href="/Equipo">Cancelar</a>
+</form>

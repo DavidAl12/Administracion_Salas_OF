@@ -2,6 +2,7 @@
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Domain;
+using System.Threading.Tasks;
 
 namespace MvcSample.Controllers
 {
@@ -40,6 +41,7 @@ namespace MvcSample.Controllers
 
             _context.Equipos.Add(eq);
             await _context.SaveChangesAsync();
+
             return RedirectToAction("Index");
         }
 
@@ -47,6 +49,10 @@ namespace MvcSample.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             var eq = await _context.Equipos.FindAsync(id);
+
+            if (eq == null)
+                return NotFound();
+
             ViewBag.Salas = await _context.Salas.ToListAsync();
             return View(eq);
         }
@@ -55,17 +61,41 @@ namespace MvcSample.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(Equipo eq)
         {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Salas = await _context.Salas.ToListAsync();
+                return View(eq);
+            }
+
             _context.Equipos.Update(eq);
             await _context.SaveChangesAsync();
+
             return RedirectToAction("Index");
         }
 
-        // ELIMINAR
+        // ELIMINAR GET
         public async Task<IActionResult> Delete(int id)
         {
+            var eq = await _context.Equipos.Include(x => x.Sala).FirstOrDefaultAsync(x => x.Id == id);
+
+            if (eq == null)
+                return NotFound();
+
+            return View(eq);
+        }
+
+        // ELIMINAR POST
+        [HttpPost, ActionName("Delete")]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
             var eq = await _context.Equipos.FindAsync(id);
+
+            if (eq == null)
+                return NotFound();
+
             _context.Equipos.Remove(eq);
             await _context.SaveChangesAsync();
+
             return RedirectToAction("Index");
         }
     }

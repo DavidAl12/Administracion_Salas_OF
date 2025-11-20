@@ -19,7 +19,8 @@ namespace MvcSample.Controllers
         public async Task<IActionResult> Dashboard()
         {
             var totalSalas = await _context.Salas.CountAsync();
-            var salasActivas = await _context.Salas.Where(x => x.Estado == "Activa").CountAsync();
+            var salasActivas = await _context.Salas.Where(x => x.Estado == "Disponible").CountAsync();
+
 
             var totalEquipos = await _context.Equipos.CountAsync();
             var equiposDisponibles = await _context.Equipos.Where(x => x.Estado == "Disponible").CountAsync();

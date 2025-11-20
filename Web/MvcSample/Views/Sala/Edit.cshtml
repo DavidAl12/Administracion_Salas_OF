@@ -1,42 +1,43 @@
 ﻿@model Domain.Sala
 
-@{
-    ViewData["Title"] = "Editar Sala";
-}
+<h2 class="fw-bold mb-4">Editar Sala</h2>
 
-<h2>Editar Sala</h2>
+<form method="post">
 
-<form asp-action="Edit" method="post">
+    <a class="btn btn-secondary mt-3" href="/Admin/Dashboard">Volver</a>
+
+     
     <input type="hidden" asp-for="Id" />
 
     <div class="mb-3">
-        <label asp-for="Nombre" class="form-label"></label>
-        <input asp-for="Nombre" class="form-control" />
-        <span asp-validation-for="Nombre" class="text-danger"></span>
+        <label>Nombre</label>
+        <input asp-for="Nombre" class="form-control" required />
     </div>
 
     <div class="mb-3">
-        <label asp-for="Ubicacion" class="form-label"></label>
-        <input asp-for="Ubicacion" class="form-control" />
-        <span asp-validation-for="Ubicacion" class="text-danger"></span>
+        <label>Ubicación</label>
+        <input asp-for="Ubicacion" class="form-control" required />
     </div>
 
     <div class="mb-3">
-        <label asp-for="Estado" class="form-label"></label>
-        <input asp-for="Estado" class="form-control" />
-        <span asp-validation-for="Estado" class="text-danger"></span>
+        <label>Capacidad</label>
+        <input asp-for="Capacidad" class="form-control" type="number" required />
     </div>
 
     <div class="mb-3">
-        <label asp-for="Capacidad" class="form-label"></label>
-        <input asp-for="Capacidad" class="form-control" />
-        <span asp-validation-for="Capacidad" class="text-danger"></span>
+        <label>Estado</label>
+        <select asp-for="Estado" class="form-control" required>
+            <option value="Disponible">Disponible</option>
+            <option value="Ocupada">Ocupada</option>
+            <option value="En mantenimiento">En mantenimiento</option>
+        </select>
     </div>
 
-    <button type="submit" class="btn btn-success">Guardar Cambios</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    <div class="mb-3">
+        <label>Responsable (opcional)</label>
+        <input asp-for="Responsable" class="form-control" />
+    </div>
+
+    <button class="btn btn-primary">Actualizar</button>
+    <a class="btn btn-secondary" href="/Admin/Dashboard">Volver</a>
 </form>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}

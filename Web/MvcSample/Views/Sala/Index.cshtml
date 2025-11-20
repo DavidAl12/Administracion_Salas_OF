@@ -15,6 +15,7 @@
             <th>Ubicación</th>
             <th>Estado</th>
             <th>Capacidad</th>
+            <th>Responsable</th>
             <th>Acciones</th>
         </tr>
     </thead>
@@ -26,6 +27,7 @@
                 <td>@sala.Ubicacion</td>
                 <td>@sala.Estado</td>
                 <td>@sala.Capacidad</td>
+                <td>@(sala.Responsable ?? "-----")</td>
                 <td>
                     <a class="btn btn-warning" asp-action="Edit" asp-route-id="@sala.Id">Editar</a>
                     <a class="btn btn-danger" asp-action="Delete" asp-route-id="@sala.Id">Eliminar</a>
