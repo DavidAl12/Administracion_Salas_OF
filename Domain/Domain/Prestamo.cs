@@ -36,7 +36,7 @@ namespace Domain
         // CAMBIO: Identity Framework, FK AprobadorId ahora es string
         public string? AprobadorId { get; set; }
 
-        public Usuario Aprobador { get; set; }
+        public Usuario? Aprobador { get; set; }
 
 
 

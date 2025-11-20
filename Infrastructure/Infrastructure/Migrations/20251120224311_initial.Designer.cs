@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251120202145_hola")]
-    partial class hola
+    [Migration("20251120224311_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -76,7 +76,7 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SalaId")
+                    b.Property<int?>("SalaId")
                         .HasColumnType("int");
 
                     b.Property<string>("Serial")
@@ -233,11 +233,8 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int?>("ResponsableId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ResponsableId1")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<string>("Responsable")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Ubicacion")
                         .IsRequired()
@@ -245,8 +242,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ResponsableId1");
 
                     b.ToTable("Salas");
                 });
@@ -488,8 +483,7 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.Sala", "Sala")
                         .WithMany("Equipos")
                         .HasForeignKey("SalaId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Sala");
                 });
@@ -553,15 +547,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("Sala");
 
                     b.Navigation("Usuario");
-                });
-
-            modelBuilder.Entity("Domain.Sala", b =>
-                {
-                    b.HasOne("Domain.Usuario", "Responsable")
-                        .WithMany()
-                        .HasForeignKey("ResponsableId1");
-
-                    b.Navigation("Responsable");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

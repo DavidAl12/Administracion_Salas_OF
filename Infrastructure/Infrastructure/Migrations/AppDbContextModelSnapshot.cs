@@ -73,7 +73,7 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SalaId")
+                    b.Property<int?>("SalaId")
                         .HasColumnType("int");
 
                     b.Property<string>("Serial")
@@ -480,8 +480,7 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.Sala", "Sala")
                         .WithMany("Equipos")
                         .HasForeignKey("SalaId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Sala");
                 });

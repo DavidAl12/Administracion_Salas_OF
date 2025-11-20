@@ -14,8 +14,8 @@ namespace Domain
 
         public string Estado { get; set; } = "Disponible";
 
-        [Required(ErrorMessage = "Debe seleccionar una sala")]
-        public int SalaId { get; set; }
+        // Nullable para permitir la acción ON DELETE SET NULL sin error
+        public int? SalaId { get; set; }
 
         public Sala Sala { get; set; }
     }

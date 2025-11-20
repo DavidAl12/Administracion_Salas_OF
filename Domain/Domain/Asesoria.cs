@@ -13,6 +13,6 @@ namespace Domain
         public Usuario Usuario { get; set; }
         // CAMBIO: Identity Framework, FK CoordinadorId ahora es string
         public string? CoordinadorId { get; set; }
-        public Usuario Coordinador { get; set; }
+        public Usuario? Coordinador { get; set; }
     }
 }
