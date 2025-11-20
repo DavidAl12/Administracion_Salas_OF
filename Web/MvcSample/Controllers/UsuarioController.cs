@@ -6,11 +6,19 @@ namespace MvcSample.Controllers
     {
         public IActionResult Dashboard()
         {
-            // Si no ha iniciado sesión, ir al login
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString("UsuarioNombre")))
+            var nombre = HttpContext.Session.GetString("UsuarioNombre");
+            var rol = HttpContext.Session.GetString("UsuarioRol");
+
+            if (string.IsNullOrEmpty(nombre))
                 return RedirectToAction("Index", "Login");
+
+            ViewBag.Nombre = nombre;
+            ViewBag.Rol = rol;
 
             return View();
         }
+
     }
+
 }
+

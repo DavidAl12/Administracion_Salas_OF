@@ -1,35 +1,55 @@
 ﻿@{
-    ViewData["Title"] = "Panel del Usuario";
+    ViewData["Title"] = "Panel de Usuario";
     var nombre = Context.Session.GetString("UsuarioNombre");
     var rol = Context.Session.GetString("UsuarioRol");
 }
 
-<h2>Bienvenido @nombre (@rol)</h2>
-<hr />
+<div class="container mt-4">
 
-<h3>¿Qué deseas hacer?</h3>
+    <div class="card shadow p-4">
+        <h2 class="text-center mb-3">Bienvenido, @nombre</h2>
+        <h5 class="text-muted text-center">Rol: @rol</h5>
+        <hr />
 
-<div class="list-group">
-    <a class="list-group-item list-group-item-action" href="/Sala/Disponibles">
-        🏢 Ver salas disponibles
-    </a>
+        <div class="row mt-4">
 
-    <a class="list-group-item list-group-item-action disabled">
-        🎒 Solicitar equipo (próximamente)
-    </a>
 
-    <a class="list-group-item list-group-item-action disabled">
-        ⚠ Reportar daño (próximamente)
-    </a>
+            @if (rol == "Normal")
+            {
+                <div class="col-md-4">
+                    <a href="/Sala/Disponibles" class="btn btn-primary w-100 mb-3">
+                        <i class="bi bi-door-open"></i> Ver salas disponibles
+                    </a>
+                </div>
 
-    <a class="list-group-item list-group-item-action disabled">
-        👨‍🏫 Solicitar asesoría (próximamente)
-    </a>
+                <div class="col-md-4">
+                    <a href="/Sala/MisSolicitudes" class="btn btn-secondary w-100 mb-3">
+                        <i class="bi bi-journal-check"></i> Mis reservas
+                    </a>
+                </div>
+            }
 
-    <a class="list-group-item list-group-item-action disabled">
-        📘 Ver mis reservas (próximamente)
-    </a>
+
+            @if (rol == "Coordinador")
+            {
+                <div class="col-md-4">
+                    <a href="/Sala/Solicitudes" class="btn btn-warning w-100 mb-3">
+                        <i class="bi bi-envelope"></i> Solicitudes de salas
+                    </a>
+                </div>
+            }
+
+
+            @if (rol == "Administrador")
+            {
+                <div class="col-md-4">
+                    <a href="/Sala/Index" class="btn btn-success w-100 mb-3">
+                        <i class="bi bi-gear"></i> Gestionar salas
+                    </a>
+                </div>
+            }
+
+        </div>
+    </div>
+
 </div>
-
-<br />
-<a class="btn btn-danger" href="/Login/Logout">Cerrar sesión</a>

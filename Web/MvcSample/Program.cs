@@ -43,6 +43,7 @@ namespace MvcSample
             // Servicios
             builder.Services.AddScoped<ISalaService, SalaService>();
 
+            builder.Services.AddScoped<IPrestamoSalaRepository, PrestamoSalaRepository>();
             // -----------------------------------------
             // AUTOMAPPER
             // -----------------------------------------
@@ -95,6 +96,9 @@ namespace MvcSample
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}"
             );
+
+            builder.Services.AddSession();
+            app.UseSession();
 
             app.Run();
         }

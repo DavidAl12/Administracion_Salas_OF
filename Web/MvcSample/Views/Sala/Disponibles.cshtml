@@ -13,6 +13,7 @@
             <th>Ubicación</th>
             <th>Capacidad</th>
             <th>Responsable</th>
+            <th>Acción</th>
         </tr>
     </thead>
 
@@ -24,7 +25,16 @@
                 <td>@sala.Ubicacion</td>
                 <td>@sala.Capacidad</td>
                 <td>@sala.Responsable</td>
+
+                <td>
+                    <a class="btn btn-primary"
+                       asp-action="Solicitar"
+                       asp-route-id="@sala.Id">
+                        Solicitar sala
+                    </a>
+                </td>
             </tr>
         }
     </tbody>
 </table>
+

@@ -1,0 +1,33 @@
+﻿@model IEnumerable<Domain.PrestamoSala>
+
+<h2>Solicitudes de Salas</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Sala</th>
+            <th>Usuario</th>
+            <th>Fecha Inicio</th>
+            <th>Fecha Fin</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var s in Model)
+        {
+            <tr>
+                <td>@s.Sala.Nombre</td>
+                <td>@s.Usuario.Nombre</td>
+                <td>@s.FechaInicio</td>
+                <td>@s.FechaFin</td>
+                <td>@s.Estado</td>
+                <td>
+                    <a class="btn btn-success" href="/Sala/Aceptar/@s.Id">Aceptar</a>
+                    <a class="btn btn-danger" href="/Sala/Denegar/@s.Id">Denegar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
