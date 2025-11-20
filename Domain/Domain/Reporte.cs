@@ -10,7 +10,7 @@ namespace Domain
         public string Estado { get; set; }
         public DateTime Fecha { get; set; }
 
-        public int UsuarioId { get; set; }
+        public string UsuarioId { get; set; }
         public Usuario Usuario { get; set; }
 
         public int? EquipoId { get; set; }

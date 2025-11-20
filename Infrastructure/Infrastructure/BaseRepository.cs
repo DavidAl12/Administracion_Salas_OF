@@ -8,10 +8,12 @@ using System.Threading.Tasks;
 
 namespace Infrastructure
 {
-    public class BaseRepository
+    // 🔹 AJUSTE: se renombra para evitar conflicto con Repositories.BaseRepository<T>
+    public class UnitOfWork
     {
         public readonly AppDbContext context;
-        public BaseRepository(AppDbContext context)
+
+        public UnitOfWork(AppDbContext context)
         {
             this.context = context;
         }
@@ -25,6 +27,7 @@ namespace Infrastructure
         {
             await context.Database.BeginTransactionAsync();
         }
+
         public async Task Comit()
         {
             await context.Database.CommitTransactionAsync();

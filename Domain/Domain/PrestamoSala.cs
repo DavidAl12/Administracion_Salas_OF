@@ -10,7 +10,8 @@ namespace Domain
         public int SalaId { get; set; }
         public Sala Sala { get; set; }
 
-        public int UsuarioId { get; set; }
+        // CAMBIO: Identity Framework, FK UsuarioId ahora es string
+        public string UsuarioId { get; set; }
         public Usuario Usuario { get; set; }
 
         public DateTime FechaInicio { get; set; }

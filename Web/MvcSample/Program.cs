@@ -1,10 +1,11 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Infrastructure;
 using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Services;
 using Services.Automapper;
+using Domain; // 👈 Para la clase Usuario
 
 namespace MvcSample
 {
@@ -19,26 +20,38 @@ namespace MvcSample
             Console.WriteLine(_configuration.GetConnectionString("DefaultConnection"));
 
             // -----------------------------------------
-            // DB CONTEXT (MYSQL - SMARTERASP.NET)
+            // DB CONTEXT (SQL SERVER LOCAL)
             // -----------------------------------------
             builder.Services.AddDbContext<AppDbContext>(options =>
             {
                 var connectionString = _configuration.GetConnectionString("DefaultConnection");
-
-                options.UseMySql(
-                    connectionString,
-                    ServerVersion.AutoDetect(connectionString)
-                );
+                options.UseSqlServer(connectionString);
             });
 
-            // Repositorios registrados desde Infrastructure
-            builder.Services.AddRepositories(_configuration);
+            // -----------------------------------------
+            // IDENTITY FRAMEWORK CON USUARIO PERSONALIZADO
+            // -----------------------------------------
+            builder.Services.AddDefaultIdentity<Usuario>(options =>
+            {
+                options.SignIn.RequireConfirmedAccount = false; // Sin correo
+            })
+            .AddEntityFrameworkStores<AppDbContext>();
 
-            // Repositorio genérico
+            // -----------------------------------------
+            // REGISTRO DE REPOSITORIOS Y SERVICIOS
+            // -----------------------------------------
+
+            // 🔹 AJUSTE: se registra el repositorio genérico correcto del namespace Infrastructure.Repositories
             builder.Services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
 
-            // Servicios
+          
+           
+
+            // Registra servicios personalizados
             builder.Services.AddScoped<ISalaService, SalaService>();
+
+            // Otros repositorios personalizados pueden ir en AddRepositories si tienes interfaces concretas
+            builder.Services.AddRepositories(_configuration);
 
             // -----------------------------------------
             // AUTOMAPPER
@@ -46,7 +59,6 @@ namespace MvcSample
             var mappingConfiguration = new MapperConfiguration(m =>
                 m.AddProfile(new MappingProfile())
             );
-
             IMapper mapper = mappingConfiguration.CreateMapper();
             builder.Services.AddSingleton(mapper);
 
@@ -61,6 +73,7 @@ namespace MvcSample
             builder.Services.AddControllersWithViews();
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+            // SOLO UNA LLAMADA A BUILD
             var app = builder.Build();
 
             // -----------------------------------------
@@ -92,6 +105,7 @@ namespace MvcSample
                 pattern: "{controller=Home}/{action=Index}/{id?}"
             );
 
+            // SOLO UNA LLAMADA A RUN
             app.Run();
         }
     }

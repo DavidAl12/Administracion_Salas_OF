@@ -1,9 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Domain;
+﻿using Domain;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure
 {
-    public class AppDbContext : DbContext
+    // 🔹 CAMBIO: Hereda de IdentityDbContext<Usuario> para integración con Identity Framework
+    public class AppDbContext : IdentityDbContext<Usuario>
     {
         // 👉 CONSTRUCTOR OBLIGATORIO PARA EF CORE
         public AppDbContext(DbContextOptions<AppDbContext> options)
@@ -12,7 +14,7 @@ namespace Infrastructure
         }
 
         // 👉 TUS TABLAS
-        public DbSet<Usuario> Usuarios { get; set; }
+        // 🔹 CAMBIO: SE ELIMINA DbSet<Usuario>; ahora Identity Framework gestiona la tabla de usuarios automáticamente.
         public DbSet<Sala> Salas { get; set; }
         public DbSet<Equipo> Equipos { get; set; }
         public DbSet<Asesoria> Asesorias { get; set; }
