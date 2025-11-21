@@ -1,6 +1,7 @@
-﻿using Domain;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Services;
+using Servicios.Models;
+using Domain;
 using System.Threading.Tasks;
 
 namespace MvcSample.Controllers
@@ -14,80 +15,88 @@ namespace MvcSample.Controllers
             _salaService = salaService;
         }
 
-        // GET: Sala
         public async Task<IActionResult> Index()
         {
-            var salas = await _salaService.ObtenerTodasAsync();
+            var salas = await _salaService.GetAllAsync();
             return View(salas);
         }
 
-        // GET: Sala/Create
         public IActionResult Create() => View();
 
-        // POST: Sala/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Sala sala)
+        public async Task<IActionResult> Create(SalaCreateViewModel input)
         {
-            sala.Responsable = null;
-            sala.Equipos = null;
-            sala.PrestamosSala = null;
-            sala.Reportes = null;
-
             if (!ModelState.IsValid)
-            {
-                return View(sala);
-            }
+                return View(input);
 
-            await _salaService.CrearAsync(sala);
-            TempData["success"] = "Sala creada correctamente";
+            var sala = new Sala
+            {
+                Nombre = input.Nombre,
+                Ubicacion = input.Ubicacion,
+                Capacidad = input.Capacidad,
+                Estado = input.Estado,
+                Responsable = string.IsNullOrEmpty(input.Responsable) ? "-----" : input.Responsable
+            };
+
+            await _salaService.AddAsync(sala);
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: Sala/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
-            var sala = await _salaService.ObtenerPorIdAsync(id);
+            var sala = await _salaService.GetByIdAsync(id);
             if (sala == null)
-            {
                 return NotFound();
-            }
-            return View(sala);
+
+            var vm = new SalaEditViewModel
+            {
+                Id = sala.Id,
+                Nombre = sala.Nombre,
+                Ubicacion = sala.Ubicacion,
+                Capacidad = sala.Capacidad,
+                Estado = sala.Estado,
+                Responsable = sala.Responsable
+            };
+
+            return View(vm);
         }
 
-        // POST: Sala/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Sala sala)
+        public async Task<IActionResult> Edit(SalaEditViewModel input)
         {
             if (!ModelState.IsValid)
-            {
-                return View(sala);
-            }
+                return View(input);
 
-            await _salaService.ActualizarAsync(sala);
-            TempData["success"] = "Sala actualizada correctamente";
+            var sala = await _salaService.GetByIdAsync(input.Id);
+            if (sala == null)
+                return NotFound();
+
+            sala.Nombre = input.Nombre;
+            sala.Ubicacion = input.Ubicacion;
+            sala.Capacidad = input.Capacidad;
+            sala.Estado = input.Estado;
+            sala.Responsable = string.IsNullOrEmpty(input.Responsable) ? "-----" : input.Responsable;
+
+            await _salaService.UpdateAsync(sala);
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: Sala/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
-            var sala = await _salaService.ObtenerPorIdAsync(id);
+            var sala = await _salaService.GetByIdAsync(id);
             if (sala == null)
-            {
                 return NotFound();
-            }
+
             return View(sala);
         }
 
-        // POST: Sala/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _salaService.EliminarAsync(id);
-            TempData["success"] = "Sala eliminada correctamente";
+            await _salaService.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
     }

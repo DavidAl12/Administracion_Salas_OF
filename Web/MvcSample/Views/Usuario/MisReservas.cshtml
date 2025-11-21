@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Servicios.Models.HistorialReservaViewModel>
+@{
+    ViewData["Title"] = "Mis Reservas";
+}
+
+<h2>Mis Reservas</h2>
+<p>Gestiona tus reservas de salas y equipos</p>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Tipo</th>
+            <th>Recurso</th>
+            <th>Sala</th>
+            <th>Fecha Inicio</th>
+            <th>Fecha Fin</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var reserva in Model)
+        {
+            <tr>
+                <td>@reserva.Tipo</td>
+                <td>@reserva.Recurso</td>
+                <td>@reserva.Sala</td>
+                <td>@reserva.FechaInicio.ToString("dd/MM/yyyy, hh:mm tt")</td>
+                <td>@reserva.FechaFin.ToString("dd/MM/yyyy, hh:mm tt")</td>
+                <td>
+                    @if (reserva.Estado == "Activa")
+                    {
+                        <span class="badge bg-primary">Activa</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">@reserva.Estado</span>
+                    }
+                </td>
+                <td>
+                    @if (reserva.PuedeLiberar)
+                    {
+                        <form asp-action="LiberarReserva" asp-route-id="@reserva.IdReserva" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-outline-primary btn-sm">Liberar</button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

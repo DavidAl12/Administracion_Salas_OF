@@ -1,36 +1,39 @@
-﻿@model Domain.Sala
+﻿@model Servicios.Models.SalaCreateViewModel
 
-
-@{
-    ViewData["Title"] = "Crear Sala";
-}
-
-<h2>Crear Sala</h2>
-
-<div asp-validation-summary="All" class="text-danger"></div>
-
-<form asp-action="Create" method="post">
-    <div class="form-group mb-3">
-        <label>Nombre</label>
-        <input asp-for="Nombre" class="form-control" />
-        <span class="text-danger" asp-validation-for="Nombre"></span>
+<h2 class="fw-bold mb-4">Registrar Sala</h2>
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="mb-3">
+        <label>Nombre de la Sala</label>
+        <input asp-for="Nombre" class="form-control" required />
+        <span asp-validation-for="Nombre" class="text-danger"></span>
     </div>
-
-    <div class="form-group mb-3">
+    <div class="mb-3">
         <label>Ubicación</label>
-        <input asp-for="Ubicacion" class="form-control" />
+        <input asp-for="Ubicacion" class="form-control" required />
+        <span asp-validation-for="Ubicacion" class="text-danger"></span>
     </div>
-
-    <div class="form-group mb-3">
-        <label>Estado</label>
-        <input asp-for="Estado" class="form-control" />
-    </div>
-
-    <div class="form-group mb-3">
+    <div class="mb-3">
         <label>Capacidad</label>
-        <input asp-for="Capacidad" type="number" class="form-control" />
+        <input asp-for="Capacidad" class="form-control" type="number" required />
+        <span asp-validation-for="Capacidad" class="text-danger"></span>
     </div>
-
-    <button type="submit" class="btn btn-success">Guardar</button>
-    <a class="btn btn-secondary" href="/Sala/Index">Cancelar</a>
+    <div class="mb-3">
+        <label>Estado</label>
+        <select asp-for="Estado" class="form-control" required>
+            <option value="Disponible">Disponible</option>
+            <option value="Ocupada">Ocupada</option>
+            <option value="En mantenimiento">En mantenimiento</option>
+        </select>
+        <span asp-validation-for="Estado" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label>Responsable (opcional)</label>
+        <input asp-for="Responsable" class="form-control" placeholder="-----" />
+    </div>
+    <button class="btn btn-primary">Guardar</button>
+    <a class="btn btn-secondary" href="/Sala">Volver</a>
 </form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

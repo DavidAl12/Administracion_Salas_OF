@@ -21,22 +21,22 @@ namespace Domain
 
         // Foreign Key equipo
 
-        public Guid EquipoId { get; set; }
+        public int EquipoId { get; set; }
 
         public Equipo Equipo { get; set; }
 
 
         // Foreign Key usuario solicitante
-
-        public Guid UsuarioId { get; set; }
+        // CAMBIO: Identity Framework, FK UsuarioId ahora es string
+        public string UsuarioId { get; set; }
 
         public Usuario Usuario { get; set; }
 
         // Foreign Key usuario aprobador
+        // CAMBIO: Identity Framework, FK AprobadorId ahora es string
+        public string? AprobadorId { get; set; }
 
-        public Guid? AprobadorId { get; set; }
-
-        public Usuario Aprobador { get; set; }
+        public Usuario? Aprobador { get; set; }
 
 
 

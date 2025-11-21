@@ -8,11 +8,11 @@ namespace Domain
         public DateTime Fecha { get; set; }
         public string Descripcion { get; set; }
         public string Estado { get; set; }
-
-        public int UsuarioId { get; set; }
+        // CAMBIO: Identity Framework, FK UsuarioId ahora es string
+        public string UsuarioId { get; set; }
         public Usuario Usuario { get; set; }
-
-        public int? CoordinadorId { get; set; }
-        public Usuario Coordinador { get; set; }
+        // CAMBIO: Identity Framework, FK CoordinadorId ahora es string
+        public string? CoordinadorId { get; set; }
+        public Usuario? Coordinador { get; set; }
     }
 }

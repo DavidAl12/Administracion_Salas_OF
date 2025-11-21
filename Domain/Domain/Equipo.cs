@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Domain
 {
@@ -7,16 +6,18 @@ namespace Domain
     {
         public int Id { get; set; }
 
-        [Required, StringLength(100)]
+        [Required(ErrorMessage = "El serial es obligatorio")]
         public string Serial { get; set; }
 
-        [StringLength(50)]
-        public string Estado { get; set; }
+        [Required(ErrorMessage = "Las especificaciones son obligatorias")]
+        public string Especificaciones { get; set; }
 
+        public string Estado { get; set; } = "Disponible";
+
+        // ✔ Debe ser nullable para usar SET NULL
+        // ❌ No debe tener [Required]
         public int? SalaId { get; set; }
-        public Sala Sala { get; set; }
 
-        public ICollection<PrestamoEquipo> PrestamosEquipo { get; set; }
-        public ICollection<Reporte> Reportes { get; set; }
+        public Sala Sala { get; set; }
     }
 }

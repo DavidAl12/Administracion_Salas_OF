@@ -1,0 +1,110 @@
+﻿@model Servicios.Models.UsuarioDashboardViewModel
+
+<link rel="stylesheet" href="~/css/dashboardUsuario.css" />
+
+<div class="usc-dashboard container mt-4">
+
+    <!-- TÍTULO Y SUBTÍTULO -->
+    <div class="mb-4">
+        <h2 class="usc-title">Panel de Usuario</h2>
+        <p class="usc-subtitle">Consulta salas, solicita equipos y reporta incidencias</p>
+    </div>
+
+    <!-- NAV TABS -->
+    <div class="usc-tabs d-flex gap-2 mb-4">
+        <a class="usc-tab active"><i class="bi bi-house"></i> Inicio</a>
+        <a class="usc-tab" asp-controller="Usuario" asp-action="ConsultarSalas"><i class="bi bi-door-open"></i> Salas</a>
+        <a class="usc-tab" asp-controller="Usuario" asp-action="SolicitarRecursos"><i class="bi bi-plus-circle"></i> Solicitar</a>
+        <a class="usc-tab" asp-controller="Usuario" asp-action="MisReservas"><i class="bi bi-bookmark"></i> Mis Reservas</a>
+        <a class="usc-tab" asp-controller="Usuario" asp-action="ReportarDaño"><i class="bi bi-exclamation-circle"></i> Reportar</a>
+        <a class="usc-tab" asp-controller="Usuario" asp-action="SolicitarAsesoria"><i class="bi bi-chat-dots"></i> Asesoría</a>
+    </div>
+
+    <!-- CARDS PRINCIPALES -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="usc-stat-card border-left-blue">
+                <p class="usc-stat-label">Reservas Activas</p>
+                <h2 class="usc-stat-number">@Model.ReservasActivas</h2>
+                <p class="usc-stat-sub">De @Model.TotalReservas reservas totales</p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="usc-stat-card border-left-yellow">
+                <p class="usc-stat-label">Reportes Pendientes</p>
+                <h2 class="usc-stat-number">@Model.ReportesPendientes</h2>
+                <p class="usc-stat-sub">De @Model.TotalReportes reportes totales</p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="usc-stat-card border-left-lightblue">
+                <p class="usc-stat-label">Asesorías Pendientes</p>
+                <h2 class="usc-stat-number">@Model.AsesoriasPendientes</h2>
+                <p class="usc-stat-sub">De @Model.TotalAsesorias solicitudes totales</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ACCIONES RÁPIDAS -->
+    <div class="usc-card-large">
+        <h4 class="usc-large-title">Acciones Rápidas</h4>
+        <p class="usc-large-sub">Acciones principales disponibles para ti</p>
+
+        <div class="row g-3 mt-2">
+
+            <div class="col-md-4">
+                <a class="usc-option" asp-controller="Usuario" asp-action="ConsultarSalas">
+                    <i class="bi bi-geo-alt"></i>
+                    <div>
+                        <h5>Consultar Salas</h5>
+                        <p>Ver estado de las salas</p>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-4">
+                <a class="usc-option" asp-controller="Usuario" asp-action="SolicitarRecursos">
+                    <i class="bi bi-pc-display"></i>
+                    <div>
+                        <h5>Solicitar Equipo</h5>
+                        <p>Reservar un equipo</p>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-4">
+                <a class="usc-option" asp-controller="Usuario" asp-action="ReportarDaño">
+                    <i class="bi bi-exclamation-octagon"></i>
+                    <div>
+                        <h5>Reportar Daño</h5>
+                        <p>Informar incidencias</p>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-4">
+                <a class="usc-option" asp-controller="Usuario" asp-action="SolicitarAsesoria">
+                    <i class="bi bi-chat-dots"></i>
+                    <div>
+                        <h5>Solicitar Asesoría</h5>
+                        <p>Ayuda técnica</p>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-4">
+                <a class="usc-option" asp-controller="Usuario" asp-action="MisReservas">
+                    <i class="bi bi-journal-check"></i>
+                    <div>
+                        <h5>Mis Reservas</h5>
+                        <p>Ver y gestionar reservas</p>
+                    </div>
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+</div>

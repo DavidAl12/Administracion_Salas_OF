@@ -1,0 +1,20 @@
+﻿@model IEnumerable<Servicios.Models.CoordinadorSalaOcupacionViewModel>
+@{
+    ViewData["Title"] = "Ocupación de Salas";
+}
+
+<h2>Estado de Ocupación de Salas</h2>
+@foreach (var sala in Model)
+{
+    <div class="card mb-3">
+        <div class="card-header">@sala.SalaNombre - @sala.Ubicacion</div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col">Total: @sala.TotalEquipos</div>
+                <div class="col text-success">Disponibles: @sala.EquiposDisponibles</div>
+                <div class="col text-danger">Ocupados: @sala.EquiposOcupados</div>
+            </div>
+            <div>Ocupación: @sala.PorcentajeOcupacion %</div>
+        </div>
+    </div>
+}

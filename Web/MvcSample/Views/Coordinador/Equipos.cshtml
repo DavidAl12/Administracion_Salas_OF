@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Servicios.Models.CoordinadorEquipoListViewModel>
+@{
+    ViewData["Title"] = "Control de Equipos";
+}
+
+<h2>Control de Equipos</h2>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Serial</th>
+            <th>Sala</th>
+            <th>Especificaciones</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var eq in Model)
+        {
+            <tr>
+                <td>@eq.Serial</td>
+                <td>@eq.SalaNombre</td>
+                <td>@eq.Especificaciones</td>
+                <td>@eq.Estado</td>
+                <td>
+                    <!-- Botón de acción personalizado -->
+                    <button class="btn btn-outline-warning btn-sm">Mantenimiento</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

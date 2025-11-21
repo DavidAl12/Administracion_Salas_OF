@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "Solicitar Recursos";
+}
+
+<h2>Solicitar Recursos</h2>
+<p>Escoge el tipo de solicitud:</p>
+
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card text-center">
+            <div class="card-body">
+                <a class="btn btn-outline-primary w-100" asp-controller="Usuario" asp-action="SolicitarSala">
+                    Solicitar Sala Completa
+                </a>
+                <p class="mt-2 mb-0">Reservar una sala completa</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card text-center">
+            <div class="card-body">
+                <a class="btn btn-outline-primary w-100" asp-controller="Usuario" asp-action="SolicitarEquipo">
+                    Solicitar Equipo Individual
+                </a>
+                <p class="mt-2 mb-0">Reservar un equipo específico</p>
+            </div>
+        </div>
+    </div>
+</div>

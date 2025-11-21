@@ -1,0 +1,96 @@
+﻿@model IEnumerable<Servicios.Models.CoordinadorReporteListViewModel>
+@{
+    ViewData["Title"] = "Reportes de Daños";
+}
+
+<h2>Reportes de Daños</h2>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Tipo</th>
+            <th>Relacionado</th>
+            <th>Descripción</th>
+            <th>Estado</th>
+            <th>Fecha</th>
+            <th>Usuario</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var r in Model)
+        {
+            <tr id="reporte-@r.ReporteId">
+                <td>@r.Tipo</td>
+                <td>@r.Relacionado</td>
+                <td>@r.Descripcion</td>
+                <td class="estado">
+                    @if (r.Estado == "Pendiente")
+                    {
+                        <span class="badge bg-secondary">Pendiente</span>
+                    }
+                    else if (r.Estado == "En Proceso")
+                    {
+                        <span class="badge bg-info">En Proceso</span>
+                    }
+                    else if (r.Estado == "Resuelto")
+                    {
+                        <span class="badge bg-success">Resuelto</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-dark">@r.Estado</span>
+                    }
+                </td>
+                <td>@r.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>@r.Usuario</td>
+                <td class="acciones">
+                    <div class="acciones-contenido">
+                        @if (r.Estado == "Pendiente")
+                        {
+                            <button class="btn btn-info btn-sm btn-accion"
+                                    data-id="@r.ReporteId"
+                                    data-estado="En Proceso">
+                                Atender
+                            </button>
+                        }
+                        @if (r.Estado == "Pendiente" || r.Estado == "En Proceso")
+                        {
+                            <button class="btn btn-success btn-sm btn-accion"
+                                    data-id="@r.ReporteId"
+                                    data-estado="Resuelto">
+                                Resolver
+                            </button>
+                        }
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).on("click", ".btn-accion", function () {
+            var id = $(this).data("id");
+            var estado = $(this).data("estado");
+            $.ajax({
+                url: '@Url.Action("CambiarEstadoReporte", "Coordinador")',
+                type: 'POST',
+                data: { id: id, estado: estado },
+                success: function (response) {
+                    if (response.success) {
+                        let badgeClass = "bg-secondary";
+                        if (response.nuevoEstado === "En Proceso") badgeClass = "bg-info";
+                        if (response.nuevoEstado === "Resuelto") badgeClass = "bg-success";
+                        $("#reporte-" + id + " .estado").html(`<span class="badge ${badgeClass}">${response.nuevoEstado}</span>`);
+                        $("#reporte-" + id + " .acciones .acciones-contenido").html(""); // Oculta acciones después del cambio
+                    }
+                },
+                error: function () {
+                    alert("Error al actualizar el estado del reporte.");
+                }
+            });
+        });
+    </script>
+}

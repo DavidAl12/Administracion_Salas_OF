@@ -1,18 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Domain;
+﻿using Domain;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<Usuario>
     {
-        // 👉 CONSTRUCTOR OBLIGATORIO PARA EF CORE
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
         {
         }
 
-        // 👉 TUS TABLAS
-        public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Sala> Salas { get; set; }
         public DbSet<Equipo> Equipos { get; set; }
         public DbSet<Asesoria> Asesorias { get; set; }
@@ -24,41 +22,75 @@ namespace Infrastructure
         {
             base.OnModelCreating(modelBuilder);
 
-            // 🔹 Relaciones configuradas correctamente
-
-            // Usuario → Asesorias como Solicitante
-            modelBuilder.Entity<Asesoria>()
-                .HasOne(a => a.Usuario)
-                .WithMany(u => u.Asesorias)
-                .HasForeignKey(a => a.UsuarioId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            // Usuario → Asesorias como Coordinador
-            modelBuilder.Entity<Asesoria>()
-                .HasOne(a => a.Coordinador)
-                .WithMany()
-                .HasForeignKey(a => a.CoordinadorId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            // Equipo → Sala
+            // Equipo - Sala (SetNull)
             modelBuilder.Entity<Equipo>()
                 .HasOne(e => e.Sala)
                 .WithMany(s => s.Equipos)
                 .HasForeignKey(e => e.SalaId)
                 .OnDelete(DeleteBehavior.SetNull);
 
-            // PrestamoSala → Sala + Usuario
+            // PrestamoSala - Sala
             modelBuilder.Entity<PrestamoSala>()
                 .HasOne(p => p.Sala)
                 .WithMany(s => s.PrestamosSala)
                 .HasForeignKey(p => p.SalaId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            // PrestamoSala - Usuario
             modelBuilder.Entity<PrestamoSala>()
                 .HasOne(p => p.Usuario)
                 .WithMany(u => u.PrestamosSala)
                 .HasForeignKey(p => p.UsuarioId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            // PrestamoEquipo - Equipo
+            modelBuilder.Entity<PrestamoEquipo>()
+                .HasOne(p => p.Equipo)
+                .WithMany()
+                .HasForeignKey(p => p.EquipoId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // PrestamoEquipo - Usuario
+            modelBuilder.Entity<PrestamoEquipo>()
+                .HasOne(p => p.Usuario)
+                .WithMany(u => u.PrestamosEquipo)
+                .HasForeignKey(p => p.UsuarioId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Asesoria - Usuario
+            modelBuilder.Entity<Asesoria>()
+                .HasOne(a => a.Usuario)
+                .WithMany(u => u.Asesorias)
+                .HasForeignKey(a => a.UsuarioId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Asesoria - Coordinador
+            modelBuilder.Entity<Asesoria>()
+                .HasOne(a => a.Coordinador)
+                .WithMany()
+                .HasForeignKey(a => a.CoordinadorId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Reporte - Usuario
+            modelBuilder.Entity<Reporte>()
+                .HasOne(r => r.Usuario)
+                .WithMany(u => u.Reportes)
+                .HasForeignKey(r => r.UsuarioId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Reporte - Equipo (opcional)
+            modelBuilder.Entity<Reporte>()
+                .HasOne(r => r.Equipo)
+                .WithMany()
+                .HasForeignKey(r => r.EquipoId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            // Reporte - Sala (opcional)
+            modelBuilder.Entity<Reporte>()
+                .HasOne(r => r.Sala)
+                .WithMany()
+                .HasForeignKey(r => r.SalaId)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

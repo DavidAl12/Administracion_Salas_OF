@@ -1,0 +1,9 @@
+﻿@model Domain.Usuario
+
+<h2>Eliminar Usuario</h2>
+<p>¿Eliminar al usuario <strong>@Model.Nombre</strong>?</p>
+<form method="post">
+    <input type="hidden" asp-for="Id" />
+    <button class="btn btn-danger">Eliminar</button>
+    <a class="btn btn-secondary" href="/Usuarios">Cancelar</a>
+</form>

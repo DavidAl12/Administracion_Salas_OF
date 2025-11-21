@@ -12,6 +12,7 @@ namespace Infrastructure
             // Ejemplo:
             // services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 
+
             return services;
         }
     }

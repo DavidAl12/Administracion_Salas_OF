@@ -1,0 +1,97 @@
+﻿@model IEnumerable<Servicios.Models.CoordinadorSolicitudListViewModel>
+@{
+    ViewData["Title"] = "Solicitudes de Recursos";
+}
+
+<h2>Solicitudes de Recursos</h2>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Tipo</th>
+            <th>Recurso</th>
+            <th>Usuario</th>
+            <th>Fecha Inicio</th>
+            <th>Fecha Fin</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var s in Model)
+        {
+            <tr id="solicitud-@s.SolicitudId">
+                <td>@s.Tipo</td>
+                <td>@s.Recurso</td>
+                <td>@s.Usuario</td>
+                <td>@s.FechaInicio.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>@s.FechaFin.ToString("dd/MM/yyyy HH:mm")</td>
+                <td class="estado">
+                    @if (s.Estado == "Pendiente")
+                    {
+                        <span class="badge bg-secondary">Pendiente</span>
+                    }
+                    else if (s.Estado == "Aprobado")
+                    {
+                        <span class="badge bg-success">Aprobado</span>
+                    }
+                    else if (s.Estado == "Rechazado")
+                    {
+                        <span class="badge bg-danger">Rechazado</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-dark">@s.Estado</span>
+                    }
+                </td>
+                <td class="acciones">
+                    <div class="acciones-contenido">
+                        @if (s.Estado == "Pendiente")
+                        {
+                            <button class="btn btn-success btn-sm btn-accion"
+                                    data-id="@s.SolicitudId"
+                                    data-tipo="@s.Tipo"
+                                    data-estado="Aprobado">
+                                Aprobar
+                            </button>
+                            <button class="btn btn-danger btn-sm btn-accion"
+                                    data-id="@s.SolicitudId"
+                                    data-tipo="@s.Tipo"
+                                    data-estado="Rechazado">
+                                Rechazar
+                            </button>
+                        }
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).on("click", ".btn-accion", function () {
+            var id = $(this).data("id");
+            var tipo = $(this).data("tipo");
+            var estado = $(this).data("estado");
+
+            $.ajax({
+                url: '@Url.Action("CambiarEstado", "Coordinador")',
+                type: 'POST',
+                data: { id: id, tipo: tipo, estado: estado },
+                success: function (response) {
+                    if (response.success) {
+                        let badgeClass = "bg-secondary";
+                        if (response.nuevoEstado === "Aprobado") badgeClass = "bg-success";
+                        else if (response.nuevoEstado === "Rechazado") badgeClass = "bg-danger";
+                        $("#solicitud-" + id + " .estado").html(`<span class="badge ${badgeClass}">${response.nuevoEstado}</span>`);
+                        $("#solicitud-" + id + " .acciones .acciones-contenido").html(""); // Oculta acciones después del cambio
+                    }
+                },
+                error: function () {
+                    alert("Error al actualizar la solicitud.");
+                }
+            });
+        });
+    </script>
+}

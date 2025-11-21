@@ -1,0 +1,243 @@
+﻿/* GENERAL */
+
+body {
+    background: #eff6ff;
+    padding-bottom: 30px;
+}
+
+/* HERO */
+.usc-hero {
+    margin-top: 70px;
+    padding: 20px;
+}
+
+.usc-hero-title {
+    font-size: 40px;
+    color: #003da5;
+    font-weight: 600;
+}
+
+.usc-hero-subtitle {
+    width: 60%;
+    margin: auto;
+    font-size: 18px;
+    color: #4a5568;
+}
+
+.usc-btn-primary {
+    margin-top: 20px;
+    background: #151414;
+    border-radius: 8px;
+}
+
+/* SECTION TITLES */
+.usc-section-title {
+    font-size: 32px;
+    color: #003da5;
+    margin-bottom: 20px;
+}
+
+/* CARDS */
+
+
+
+.usc-card {
+    background: white;
+    border-radius: 14px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.08);
+    text-align: center;
+}
+
+.usc-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 12px;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 32px;
+}
+
+.usc-hero-subtitle {
+    width: 60%;
+    margin: auto;
+    font-size: 18px;
+    color: #4a5568;
+}
+
+.usc-btn-primary {
+    margin-top: 20px;
+    background: #003da5;
+    border-radius: 8px;
+}
+
+/* SECTION TITLES */
+.usc-section-title {
+    font-size: 32px;
+    color: #003da5;
+    margin-bottom: 20px;
+}
+
+/* CARDS */
+.usc-section-cards {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 40px 30px;
+    width: 90%;
+    margin: auto;
+}
+
+
+.usc-card {
+    background: white;
+    border-radius: 14px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.08);
+    text-align: center;
+}
+
+.usc-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 12px;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 32px;
+}
+
+.bg-purple {
+    background: #f3e8ff;
+}
+
+.bg-blue {
+    background: #dbeafe;
+}
+
+.bg-green {
+    background: #dcfce7;
+}
+
+.usc-icon i {
+    color: #003da5; /* Azul USC por defecto */
+}
+
+.usc-card-title {
+    margin-top: 15px;
+    color: #003da5;
+}
+
+.usc-list {
+    list-style: none;
+    text-align: left;
+    margin-top: 15px;
+    padding: 0 15px;
+}
+
+.usc-list li {
+    font-size: 16px;
+    color: #4a5568;
+    margin-bottom: 8px;
+}
+
+/* === COLORES DE BORDE PARA CARDS DE ROLES === */
+.usc-card.border-purple-top {
+    border-top: 6px solid #c084fc !important; /* Violeta */
+}
+
+.usc-card.border-blue-top {
+    border-top: 6px solid #60a5fa !important; /* Azul */
+}
+
+.usc-card.border-green-top {
+    border-top: 6px solid #86efac !important; /* Verde */
+}
+
+/* Administrador */
+.border-purple-top .usc-icon i {
+    color: #7e22ce;
+}
+
+/* Coordinador */
+.border-blue-top .usc-icon i {
+    color: #1d4ed8;
+}
+
+/* Usuarios */
+.border-green-top .usc-icon i {
+    color: #15803d;
+}
+
+
+/* SERVICES */
+.usc-service-card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.08);
+}
+
+.usc-service-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    font-size: 28px;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Colores de iconos según servicio */
+
+/* Reserva de Salas (azul claro) */
+.bg-blue-light {
+    background: #dbeafe;
+}
+
+    .bg-blue-light i {
+        color: #1d4ed8; /* azul fuerte */
+    }
+
+/* Préstamo de Equipos (verde claro) */
+.bg-green-light {
+    background: #dcfce7;
+}
+
+    .bg-green-light i {
+        color: #166534; /* verde fuerte */
+    }
+
+/* Reporte de incidencias (amarillo) */
+.bg-yellow-light {
+    background: #fef9c3;
+}
+
+    .bg-yellow-light i {
+        color: #ca8a04; /* amarillo oscuro */
+    }
+
+/* Gestión de horarios (morado claro) */
+.bg-purple-light {
+    background: #f3e8ff;
+}
+
+    .bg-purple-light i {
+        color: #7e22ce; /* morado */
+    }
+
+
+.usc-service-title {
+    color: #003da5;
+    margin-top: 15px;
+    font-size: 18px;
+}
+
+.usc-service-desc {
+    color: #4a5568;
+    font-size: 14px;
+}

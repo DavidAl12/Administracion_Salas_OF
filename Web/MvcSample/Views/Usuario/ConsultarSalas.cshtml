@@ -1,0 +1,16 @@
+﻿@model IEnumerable<Servicios.Models.SalaListViewModel>
+@{
+    ViewData["Title"] = "Consulta de Salas";
+}
+<h2>Salas Disponibles</h2>
+@foreach (var sala in Model)
+{
+    <div class="card mb-3">
+        <div class="card-header">@sala.Nombre - @sala.Ubicacion</div>
+        <div class="card-body">
+            <p>Capacidad: @sala.Capacidad personas</p>
+            <p>Estado: <span class="badge bg-primary">@sala.Estado</span></p>
+            <p>Total Equipos: @sala.TotalEquipos, Disponibles: @sala.EquiposDisponibles</p>
+        </div>
+    </div>
+}

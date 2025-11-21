@@ -1,0 +1,98 @@
+﻿@{
+    ViewData["Title"] = "Panel de Administración";
+}
+
+<link rel="stylesheet" href="~/css/dashboardAdmin.css" />
+
+
+<div class="usc-dashboard container mt-4">
+
+    <!-- TÍTULO PRINCIPAL -->
+    <div class="mb-4">
+        <h2 class="usc-title-primary">Panel de Administración</h2>
+        <p class="usc-subtitle-primary">Gestiona salas, equipos y usuarios del sistema</p>
+    </div>
+
+    <!-- PESTAÑAS -->
+    <ul class="nav usc-tabs justify-content-center mb-4">
+        <li class="nav-item">
+            <a class="nav-link usc-tab-item active" href="#">Resumen</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link usc-tab-item" href="/Sala">Salas</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link usc-tab-item" href="/Equipo">Equipos</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link usc-tab-item" href="/Usuarios">Usuarios</a>
+        </li>
+    </ul>
+
+    <!-- TARJETAS ESTADÍSTICAS -->
+    <div class="row g-4">
+
+        <div class="col-md-4">
+            <div class="usc-card card shadow-sm p-3 border-start-usc">
+                <h5 class="usc-card-title">Salas Activas</h5>
+                <h2 class="usc-card-number">@ViewBag.SalasActivas</h2>
+                <small class="usc-card-desc">De @ViewBag.TotalSalas salas totales</small>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="usc-card card shadow-sm p-3 border-start-usc">
+                <h5 class="usc-card-title">Equipos Disponibles</h5>
+                <h2 class="usc-card-number">@ViewBag.EquiposDisponibles</h2>
+                <small class="usc-card-desc">De @ViewBag.TotalEquipos equipos totales</small>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="usc-card card shadow-sm p-3 border-start-usc">
+                <h5 class="usc-card-title">Usuarios Registrados</h5>
+                <h2 class="usc-card-number">@ViewBag.TotalUsuarios</h2>
+                <small class="usc-card-desc">En el sistema</small>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ACCESO RÁPIDO -->
+    <div class="mt-5">
+        <h4 class="usc-title-secondary">Acceso Rápido</h4>
+        <p class="usc-subtitle-secondary">Acciones principales del administrador</p>
+
+        <div class="row g-4">
+
+            <div class="col-md-4">
+                <a href="/Sala" class="text-decoration-none">
+                    <div class="usc-quick-card card p-4 shadow-sm">
+                        <h5 class="usc-quick-title">Gestionar Salas</h5>
+                        <small class="usc-quick-desc">CRUD de salas de cómputo</small>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-4">
+                <a href="/Equipo" class="text-decoration-none">
+                    <div class="usc-quick-card card p-4 shadow-sm">
+                        <h5 class="usc-quick-title">Gestionar Equipos</h5>
+                        <small class="usc-quick-desc">CRUD de equipos de cómputo</small>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-4">
+                <a href="/Usuarios" class="text-decoration-none">
+                    <div class="usc-quick-card card p-4 shadow-sm">
+                        <h5 class="usc-quick-title">Gestionar Usuarios</h5>
+                        <small class="usc-quick-desc">CRUD y asignación de roles</small>
+                    </div>
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+</div>

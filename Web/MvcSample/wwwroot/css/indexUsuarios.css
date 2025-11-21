@@ -1,0 +1,111 @@
+﻿/* ============================================================
+   ESTILOS PARA LA PÁGINA DE USUARIOS (.usuarios-page)
+   Igual estilo que Salas y Equipos
+===============================================================*/
+
+/* ----- TITULOS ----- */
+.usuarios-page .usc-title-primary {
+    color: var(--usc-blue, #003da5);
+    font-size: 26px;
+    font-weight: 700;
+}
+
+.usuarios-page .usc-subtitle-primary {
+    color: var(--usc-gray, #717182);
+    font-size: 16px;
+}
+
+/* ----- TABS ----- */
+.usuarios-page .usc-tabs {
+    background: #ececf0;
+    border-radius: 14px;
+    padding: 6px;
+    width: fit-content;
+    margin: 0 auto;
+}
+
+.usuarios-page .usc-tab-item {
+    color: #000;
+    padding: 10px 28px;
+    border-radius: 12px !important;
+    font-weight: 500;
+    transition: 0.2s ease;
+    border: none !important;
+}
+
+    .usuarios-page .usc-tab-item:hover {
+        background: rgba(0, 61, 165, 0.1);
+        color: #003da5;
+    }
+
+    .usuarios-page .usc-tab-item.active {
+        background: #003da5 !important;
+        color: #fff !important;
+        font-weight: 600;
+    }
+
+/* ----- CARD HEADER ----- */
+.usuarios-page .usuarios-card-header {
+    border-left: 4px solid #003da5 !important;
+    border-radius: 14px;
+}
+
+.usuarios-page .header-title {
+    font-weight: 700;
+}
+
+.usuarios-page .header-subtitle {
+    color: #4a5568;
+}
+
+/* ----- BOTÓN PRINCIPAL ----- */
+.usuarios-page .btn-add-usuario {
+    background: #003da5 !important;
+    border-radius: 10px;
+    padding: 8px 20px;
+    font-weight: 600;
+    color: white;
+}
+
+/* ----- TABLA ----- */
+.usuarios-page .usuarios-table thead th {
+    color: #181717;
+    font-weight: 600;
+    padding: 14px;
+}
+
+.usuarios-page .usuarios-table tbody td {
+    font-size: 15px;
+    color: #2d2d2d;
+    padding: 16px;
+}
+/* ============================================================
+   BADGES DE ROLES (mismo estilo que estados de salas)
+===============================================================*/
+
+.badge-role-admin {
+    background: #f3e8ff; /* Morado suave */
+    color: #6b21a8; /* Morado fuerte */
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.badge-role-coord {
+    background: #dbeafe; /* Azul claro */
+    color: #003da5; /* Azul institucional USC */
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.badge-role-user {
+    background: #dcfce7; /* Verde suave */
+    color: #15803d; /* Verde fuerte */
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+}
