@@ -1,5 +1,6 @@
 ﻿using Domain;
-using Infrastructure.Repositories;
+using Infrastructure;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -7,43 +8,46 @@ namespace Services
 {
     public class PrestamoEquipoService : IPrestamoEquipoService
     {
-        private readonly IRepository<PrestamoEquipo> _repo;
+        private readonly AppDbContext _context;
 
-        public PrestamoEquipoService(IRepository<PrestamoEquipo> repo)
+        public PrestamoEquipoService(AppDbContext context)
         {
-            _repo = repo;
+            _context = context;
         }
 
         public async Task AddAsync(PrestamoEquipo prestamo)
         {
-            await _repo.AddAsync(prestamo);
-            await _repo.SaveChangesAsync();
+            _context.PrestamosEquipo.Add(prestamo);
+            await _context.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(int id)
         {
-            var prestamo = await _repo.GetByIdAsync(id);
+            var prestamo = await _context.PrestamosEquipo.FindAsync(id);
             if (prestamo != null)
             {
-                _repo.Remove(prestamo);
-                await _repo.SaveChangesAsync();
+                _context.PrestamosEquipo.Remove(prestamo);
+                await _context.SaveChangesAsync();
             }
         }
 
         public async Task<IEnumerable<PrestamoEquipo>> GetAllAsync()
         {
-            return await _repo.GetAllAsync();
+            // Puedes incluir relación con Equipo o Usuario si necesitas
+            return await _context.PrestamosEquipo.ToListAsync();
         }
 
         public async Task<PrestamoEquipo> GetByIdAsync(int id)
         {
-            return await _repo.GetByIdAsync(id);
+            return await _context.PrestamosEquipo
+                //.Include(p => p.Equipo)
+                .FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task UpdateAsync(PrestamoEquipo prestamo)
         {
-            _repo.Update(prestamo);
-            await _repo.SaveChangesAsync();
+            _context.PrestamosEquipo.Update(prestamo);
+            await _context.SaveChangesAsync();
         }
     }
 }

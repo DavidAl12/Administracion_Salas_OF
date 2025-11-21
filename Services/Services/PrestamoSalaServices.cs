@@ -1,5 +1,6 @@
 ﻿using Domain;
-using Infrastructure.Repositories;
+using Infrastructure; // Tu contexto AppDbContext
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -7,43 +8,43 @@ namespace Services
 {
     public class PrestamoSalaService : IPrestamoSalaService
     {
-        private readonly IRepository<PrestamoSala> _repo;
+        private readonly AppDbContext _context;
 
-        public PrestamoSalaService(IRepository<PrestamoSala> repo)
+        public PrestamoSalaService(AppDbContext context)
         {
-            _repo = repo;
+            _context = context;
         }
 
         public async Task AddAsync(PrestamoSala prestamo)
         {
-            await _repo.AddAsync(prestamo);
-            await _repo.SaveChangesAsync();
-        }
-
-        public async Task DeleteAsync(int id)
-        {
-            var prestamo = await _repo.GetByIdAsync(id);
-            if (prestamo != null)
-            {
-                _repo.Remove(prestamo);
-                await _repo.SaveChangesAsync();
-            }
+            _context.PrestamosSala.Add(prestamo);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<PrestamoSala>> GetAllAsync()
         {
-            return await _repo.GetAllAsync();
+            return await _context.PrestamosSala.ToListAsync();
         }
 
         public async Task<PrestamoSala> GetByIdAsync(int id)
         {
-            return await _repo.GetByIdAsync(id);
+            return await _context.PrestamosSala.FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task UpdateAsync(PrestamoSala prestamo)
         {
-            _repo.Update(prestamo);
-            await _repo.SaveChangesAsync();
+            _context.PrestamosSala.Update(prestamo);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            var prestamo = await _context.PrestamosSala.FindAsync(id);
+            if (prestamo != null)
+            {
+                _context.PrestamosSala.Remove(prestamo);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

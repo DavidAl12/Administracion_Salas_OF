@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Servicios.Models;
 using Services;
-using Domain; // Para el modelo Usuario
+using Domain;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,7 +15,6 @@ public class CoordinadorController : Controller
     private readonly IPrestamoEquipoService _prestamoEquipoService;
     private readonly IPrestamoSalaService _prestamoSalaService;
     private readonly IReporteService _reporteService;
-    private readonly IAsesoriaService _asesoriaService;
     private readonly UserManager<Usuario> _userManager;
 
     public CoordinadorController(
@@ -24,7 +23,6 @@ public class CoordinadorController : Controller
         IPrestamoEquipoService prestamoEquipoService,
         IPrestamoSalaService prestamoSalaService,
         IReporteService reporteService,
-        IAsesoriaService asesoriaService,
         UserManager<Usuario> userManager
     )
     {
@@ -33,7 +31,6 @@ public class CoordinadorController : Controller
         _prestamoEquipoService = prestamoEquipoService;
         _prestamoSalaService = prestamoSalaService;
         _reporteService = reporteService;
-        _asesoriaService = asesoriaService;
         _userManager = userManager;
     }
 
@@ -76,14 +73,12 @@ public class CoordinadorController : Controller
         var equipos = (await _equipoService.GetAllAsync()).ToList();
         var salas = (await _salaService.GetAllAsync()).ToList();
 
-        // Junta todos los Ids únicos de usuario involucrados en solicitudes
         var allUserIds = prestamosEquipo.Select(p => p.UsuarioId)
             .Concat(prestamosSala.Select(p => p.UsuarioId))
             .Where(id => !string.IsNullOrEmpty(id))
             .Distinct()
             .ToList();
 
-        // Descarga los usuarios de Identity y asocia su Nombre
         var userDict = new Dictionary<string, string>();
         foreach (var userId in allUserIds)
         {
@@ -131,6 +126,35 @@ public class CoordinadorController : Controller
             .ToList());
     }
 
+    [HttpPost]
+    public async Task<IActionResult> CambiarEstado(int id, string tipo, string estado)
+    {
+        bool actualizado = false;
+
+        if (tipo == "Equipo")
+        {
+            var solicitud = await _prestamoEquipoService.GetByIdAsync(id);
+            if (solicitud != null && solicitud.Estado == "Pendiente")
+            {
+                solicitud.Estado = estado;
+                await _prestamoEquipoService.UpdateAsync(solicitud);
+                actualizado = true;
+            }
+        }
+        else if (tipo == "Sala")
+        {
+            var solicitud = await _prestamoSalaService.GetByIdAsync(id);
+            if (solicitud != null && solicitud.Estado == "Pendiente")
+            {
+                solicitud.Estado = estado;
+                await _prestamoSalaService.UpdateAsync(solicitud);
+                actualizado = true;
+            }
+        }
+
+        return Json(new { success = actualizado, nuevoEstado = estado });
+    }
+
     public async Task<IActionResult> Ocupacion()
     {
         var salas = await _salaService.GetAllAsync();
@@ -158,8 +182,6 @@ public class CoordinadorController : Controller
     public async Task<IActionResult> Reportes()
     {
         var reportes = await _reporteService.GetAllAsync();
-
-        // Todos los UsuarioId únicos en reportes
         var allUserIds = reportes.Select(r => r.UsuarioId)
             .Where(id => !string.IsNullOrEmpty(id))
             .Distinct().ToList();
@@ -187,36 +209,19 @@ public class CoordinadorController : Controller
         }).ToList();
         return View(model);
     }
+
     [HttpPost]
-    [HttpPost]
-    public async Task<IActionResult> CambiarEstado(int id, string tipo, string estado)
+    public async Task<IActionResult> CambiarEstadoReporte(int id, string estado)
     {
-        bool actualizado = false;
-
-        if (tipo == "Equipo")
+        var reporte = await _reporteService.GetByIdAsync(id);
+        if (reporte != null)
         {
-            var solicitud = await _prestamoEquipoService.GetByIdAsync(id);
-            if (solicitud != null)
-            {
-                solicitud.Estado = estado;
-                await _prestamoEquipoService.UpdateAsync(solicitud);
-                actualizado = true;
-            }
+            reporte.Estado = estado;
+            await _reporteService.UpdateAsync(reporte);
+            return Json(new { success = true, nuevoEstado = estado });
         }
-        else if (tipo == "Sala")
-        {
-            var solicitud = await _prestamoSalaService.GetByIdAsync(id);
-            if (solicitud != null)
-            {
-                solicitud.Estado = estado;
-                await _prestamoSalaService.UpdateAsync(solicitud);
-                actualizado = true;
-            }
-        }
-
-        return Json(new { success = actualizado, nuevoEstado = estado });
+        return Json(new { success = false });
     }
-
 
     public IActionResult Informes()
     {
