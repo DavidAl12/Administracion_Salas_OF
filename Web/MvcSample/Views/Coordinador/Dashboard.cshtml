@@ -1,0 +1,73 @@
+﻿@model Servicios.Models.CoordinadorDashboardViewModel
+@{
+    ViewData["Title"] = "Panel de Coordinación";
+}
+
+<h1>@ViewData["Title"]</h1>
+<p>Gestiona equipos, reservas y reportes de las salas</p>
+
+<div class="row mb-3">
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <div>Equipos Disponibles</div>
+                <h2>@Model.EquiposDisponibles</h2>
+                <p>De @Model.EquiposTotales equipos totales</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center border-warning">
+            <div class="card-body">
+                <div>Solicitudes Pendientes</div>
+                <h2>@Model.SolicitudesPendientes</h2>
+                <p>Requieren aprobación</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center border-danger">
+            <div class="card-body">
+                <div>Reportes de Daños</div>
+                <h2>@Model.ReportesPendientes</h2>
+                <p>Sin resolver</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h3>Acceso Rápido</h3>
+<div class="row mt-3">
+    <div class="col-md-4">
+        <div class="card card-body">
+            <a asp-action="Equipos" class="btn btn-outline-primary w-100">Gestionar Equipos</a>
+            <div>Asignar, bloquear y liberar</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card card-body">
+            <a asp-action="Solicitudes" class="btn btn-outline-primary w-100">Revisar Solicitudes</a>
+            <div>Aprobar o rechazar préstamos</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card card-body">
+            <a asp-action="Ocupacion" class="btn btn-outline-primary w-100">Ver Ocupación</a>
+            <div>Estado de salas diario y semanal</div>
+        </div>
+    </div>
+</div>
+<div class="row mt-3">
+    <div class="col-md-4">
+        <div class="card card-body">
+            <a asp-action="Reportes" class="btn btn-outline-warning w-100">Atender Reportes</a>
+            <div>Daños en equipos y salas</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card card-body">
+            <a asp-action="Informes" class="btn btn-outline-info w-100">Generar Informes</a>
+            <div>Disponibilidad y estado</div>
+        </div>
+    </div>
+</div>

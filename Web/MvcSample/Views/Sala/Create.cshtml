@@ -1,27 +1,23 @@
-﻿@model Domain.Sala
+﻿@model Servicios.Models.SalaCreateViewModel
 
 <h2 class="fw-bold mb-4">Registrar Sala</h2>
-
 <form method="post">
-
-    <a class="btn btn-secondary mt-3" href="/Admin/Dashboard">Volver</a>
-
-
+    <div asp-validation-summary="All" class="text-danger"></div>
     <div class="mb-3">
         <label>Nombre de la Sala</label>
         <input asp-for="Nombre" class="form-control" required />
+        <span asp-validation-for="Nombre" class="text-danger"></span>
     </div>
-
     <div class="mb-3">
         <label>Ubicación</label>
         <input asp-for="Ubicacion" class="form-control" required />
+        <span asp-validation-for="Ubicacion" class="text-danger"></span>
     </div>
-
     <div class="mb-3">
         <label>Capacidad</label>
         <input asp-for="Capacidad" class="form-control" type="number" required />
+        <span asp-validation-for="Capacidad" class="text-danger"></span>
     </div>
-
     <div class="mb-3">
         <label>Estado</label>
         <select asp-for="Estado" class="form-control" required>
@@ -29,13 +25,15 @@
             <option value="Ocupada">Ocupada</option>
             <option value="En mantenimiento">En mantenimiento</option>
         </select>
+        <span asp-validation-for="Estado" class="text-danger"></span>
     </div>
-
     <div class="mb-3">
         <label>Responsable (opcional)</label>
         <input asp-for="Responsable" class="form-control" placeholder="-----" />
     </div>
-
     <button class="btn btn-primary">Guardar</button>
-    <a class="btn btn-secondary" href="/Admin/Dashboard">Volver</a>
+    <a class="btn btn-secondary" href="/Sala">Volver</a>
 </form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

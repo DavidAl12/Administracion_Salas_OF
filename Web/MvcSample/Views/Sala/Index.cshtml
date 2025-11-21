@@ -1,13 +1,7 @@
 ﻿@model IEnumerable<Domain.Sala>
 
-@{
-    ViewData["Title"] = "Listado de Salas";
-}
-
-<h2>Salas</h2>
-
-<a class="btn btn-primary mb-3" asp-action="Create">Crear Nueva Sala</a>
-
+<h2 class="fw-bold mb-4">Salas</h2>
+<a class="btn btn-primary mb-3" href="/Sala/Create">Crear Nueva Sala</a>
 <table class="table table-bordered table-striped">
     <thead>
         <tr>
@@ -29,8 +23,8 @@
                 <td>@sala.Capacidad</td>
                 <td>@(sala.Responsable ?? "-----")</td>
                 <td>
-                    <a class="btn btn-warning" asp-action="Edit" asp-route-id="@sala.Id">Editar</a>
-                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@sala.Id">Eliminar</a>
+                    <a class="btn btn-warning btn-sm" href="/Sala/Edit/@sala.Id">Editar</a>
+                    <a class="btn btn-danger btn-sm" href="/Sala/Delete/@sala.Id">Eliminar</a>
                 </td>
             </tr>
         }

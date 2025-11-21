@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Servicios.Models.CoordinadorSolicitudListViewModel>
+@{
+    ViewData["Title"] = "Solicitudes de Recursos";
+}
+
+<h2>Solicitudes de Recursos</h2>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Tipo</th>
+            <th>Recurso</th>
+            <th>Usuario</th>
+            <th>Fecha Inicio</th>
+            <th>Fecha Fin</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var s in Model)
+        {
+            <tr>
+                <td>@s.Tipo</td>
+                <td>@s.Recurso</td>
+                <td>@s.Usuario</td>
+                <td>@s.FechaInicio.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>@s.FechaFin.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>@s.Estado</td>
+                <td>
+                    <button class="btn btn-success btn-sm">Aprobar</button>
+                    <button class="btn btn-danger btn-sm">Rechazar</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

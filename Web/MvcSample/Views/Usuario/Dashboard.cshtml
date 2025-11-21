@@ -41,7 +41,9 @@
     <div class="col-md-3">
         <div class="card text-center">
             <div class="card-body">
-                <a class="btn btn-outline-primary w-100" asp-controller="Sala" asp-action="Index">Consultar Salas</a>
+                <a class="btn btn-outline-primary w-100" asp-controller="Usuario" asp-action="ConsultarSalas">
+                    Consultar Salas
+                </a>
                 <p class="mt-2 mb-0">Ver estado de las salas</p>
             </div>
         </div>
@@ -49,15 +51,19 @@
     <div class="col-md-3">
         <div class="card text-center">
             <div class="card-body">
-                <a class="btn btn-outline-primary w-100" asp-controller="Equipo" asp-action="Solicitar">Solicitar Recurso</a>
-                <p class="mt-2 mb-0">Reservar un recurso</p>
+                <a class="btn btn-outline-primary w-100" asp-controller="Usuario" asp-action="SolicitarRecursos">
+                    Solicitar Recursos
+                </a>
+                <p class="mt-2 mb-0">Reservar sala o equipo</p>
             </div>
         </div>
     </div>
     <div class="col-md-3">
         <div class="card text-center">
             <div class="card-body">
-                <a class="btn btn-outline-warning w-100" asp-controller="Reporte" asp-action="Crear">Reportar Daño</a>
+                <a class="btn btn-outline-warning w-100" asp-controller="Usuario" asp-action="ReportarDaño">
+                    Reportar Daño
+                </a>
                 <p class="mt-2 mb-0">Informar incidencias</p>
             </div>
         </div>
@@ -65,8 +71,23 @@
     <div class="col-md-3">
         <div class="card text-center">
             <div class="card-body">
-                <a class="btn btn-outline-info w-100" asp-controller="Asesoria" asp-action="Solicitar">Solicitar Asesoría</a>
+                <a class="btn btn-outline-info w-100" asp-controller="Usuario" asp-action="SolicitarAsesoria">
+                    Solicitar Asesoría
+                </a>
                 <p class="mt-2 mb-0">Ayuda técnica</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <a class="btn btn-outline-primary w-100" asp-controller="Usuario" asp-action="MisReservas">
+                    Mis Reservas
+                </a>
+                <p class="mt-2 mb-0">Ver y gestionar reservas</p>
             </div>
         </div>
     </div>

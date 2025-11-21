@@ -1,0 +1,25 @@
+﻿@model Servicios.Models.AsesoriaViewModel
+@{
+    ViewData["Title"] = "Solicitar Asesoría Técnica";
+}
+<h2>Solicitar Asesoría Técnica</h2>
+<form method="post">
+    <div>
+        <label>Fecha y Hora Preferida</label>
+        <input asp-for="FechaPreferida" type="datetime-local" />
+    </div>
+    <div>
+        <label>¿En qué necesitas ayuda?</label>
+        <textarea asp-for="Descripcion"></textarea>
+    </div>
+    <div class="alert alert-info mt-3">
+        <strong>Ejemplos de asesorías:</strong>
+        <ul>
+            <li>Instalación de software específico</li>
+            <li>Configuración de herramientas y aplicaciones</li>
+            <li>Resolución de problemas técnicos</li>
+            <li>Capacitación en uso de equipos</li>
+        </ul>
+    </div>
+    <button type="submit">Solicitar Asesoría</button>
+</form>

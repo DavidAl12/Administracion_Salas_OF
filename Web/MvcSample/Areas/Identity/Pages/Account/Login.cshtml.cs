@@ -81,7 +81,7 @@ namespace MvcSample.Areas.Identity.Pages.Account
                         return RedirectToAction("Dashboard", "Admin");
 
                     if (await _userManager.IsInRoleAsync(usuario, "Coordinador"))
-                        return RedirectToAction("Index", "Coordinador");
+                        return RedirectToAction("Dashboard", "Coordinador");
 
                     if (await _userManager.IsInRoleAsync(usuario, "Usuario"))
                         return RedirectToAction("Dashboard", "Usuario");

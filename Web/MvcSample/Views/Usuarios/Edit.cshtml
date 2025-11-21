@@ -1,21 +1,19 @@
-﻿@model Domain.Usuario
+﻿@model Servicios.Models.UsuarioEditViewModel
 
 <h2 class="fw-bold mb-3">Editar Usuario</h2>
-
 <form method="post">
-
     <input type="hidden" asp-for="Id" />
-
+    <div asp-validation-summary="All" class="text-danger"></div>
     <div class="mb-3">
         <label>Nombre</label>
         <input asp-for="Nombre" class="form-control" />
+        <span asp-validation-for="Nombre" class="text-danger"></span>
     </div>
-
     <div class="mb-3">
         <label>Email</label>
         <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
     </div>
-
     <div class="mb-3">
         <label>Rol</label>
         <select asp-for="Rol" class="form-control">
@@ -23,14 +21,16 @@
             <option>Coordinador</option>
             <option>Admin</option>
         </select>
+        <span asp-validation-for="Rol" class="text-danger"></span>
     </div>
-
     <div class="mb-3">
         <label>Fecha Registro</label>
         <input asp-for="FechaRegistro" type="date" class="form-control" />
+        <span asp-validation-for="FechaRegistro" class="text-danger"></span>
     </div>
-
     <button class="btn btn-warning">Actualizar</button>
     <a class="btn btn-secondary" href="/Usuarios">Volver</a>
-
 </form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

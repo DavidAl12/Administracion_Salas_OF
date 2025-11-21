@@ -1,6 +1,7 @@
-﻿using Domain;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Services;
+using Servicios.Models;
+using Domain;
 using System.Threading.Tasks;
 
 namespace MvcSample.Controllers
@@ -24,16 +25,21 @@ namespace MvcSample.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Sala sala)
+        public async Task<IActionResult> Create(SalaCreateViewModel input)
         {
             if (!ModelState.IsValid)
-                return View(sala);
+                return View(input);
 
-            if (string.IsNullOrEmpty(sala.Responsable))
-                sala.Responsable = "-----";
+            var sala = new Sala
+            {
+                Nombre = input.Nombre,
+                Ubicacion = input.Ubicacion,
+                Capacidad = input.Capacidad,
+                Estado = input.Estado,
+                Responsable = string.IsNullOrEmpty(input.Responsable) ? "-----" : input.Responsable
+            };
 
             await _salaService.AddAsync(sala);
-
             return RedirectToAction(nameof(Index));
         }
 
@@ -43,18 +49,35 @@ namespace MvcSample.Controllers
             if (sala == null)
                 return NotFound();
 
-            return View(sala);
+            var vm = new SalaEditViewModel
+            {
+                Id = sala.Id,
+                Nombre = sala.Nombre,
+                Ubicacion = sala.Ubicacion,
+                Capacidad = sala.Capacidad,
+                Estado = sala.Estado,
+                Responsable = sala.Responsable
+            };
+
+            return View(vm);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Sala sala)
+        public async Task<IActionResult> Edit(SalaEditViewModel input)
         {
             if (!ModelState.IsValid)
-                return View(sala);
+                return View(input);
 
-            if (string.IsNullOrEmpty(sala.Responsable))
-                sala.Responsable = "-----";
+            var sala = await _salaService.GetByIdAsync(input.Id);
+            if (sala == null)
+                return NotFound();
+
+            sala.Nombre = input.Nombre;
+            sala.Ubicacion = input.Ubicacion;
+            sala.Capacidad = input.Capacidad;
+            sala.Estado = input.Estado;
+            sala.Responsable = string.IsNullOrEmpty(input.Responsable) ? "-----" : input.Responsable;
 
             await _salaService.UpdateAsync(sala);
             return RedirectToAction(nameof(Index));

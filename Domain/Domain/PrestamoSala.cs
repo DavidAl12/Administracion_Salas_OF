@@ -18,6 +18,6 @@ namespace Domain
         public DateTime FechaFin { get; set; }
 
         public string Estado { get; set; }
-        public string AprobadoPor { get; set; }
+        public string? AprobadoPor { get; set; }
     }
 }

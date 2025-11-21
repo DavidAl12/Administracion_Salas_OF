@@ -1,37 +1,26 @@
-﻿@model Domain.Equipo
+﻿@model Servicios.Models.EquipoCreateViewModel
 
 <h2 class="fw-bold mb-4">Registrar Equipo</h2>
-
-<form asp-action="Create" asp-controller="Equipo" method="post">
+<form method="post">
     <div asp-validation-summary="All" class="text-danger"></div>
-
     <div class="mb-3">
         <label>Serial del Equipo</label>
         <input asp-for="Serial" class="form-control" />
         <span asp-validation-for="Serial" class="text-danger"></span>
     </div>
-
     <div class="mb-3">
         <label>Especificaciones</label>
         <textarea asp-for="Especificaciones" class="form-control"></textarea>
         <span asp-validation-for="Especificaciones" class="text-danger"></span>
     </div>
-
     <div class="mb-3">
         <label>Sala</label>
-        <select asp-for="SalaId" class="form-control">
-            @foreach (var sala in ViewBag.Salas)
-            {
-                <option value="@sala.Id">@sala.Nombre</option>
-            }
-        </select>
+        <select asp-for="SalaId" class="form-control" asp-items="ViewBag.Salas"></select>
         <span asp-validation-for="SalaId" class="text-danger"></span>
     </div>
-
     <button type="submit" class="btn btn-primary">Guardar</button>
-    <a class="btn btn-secondary" href="/Admin/Dashboard">Volver</a>
+    <a class="btn btn-secondary" href="/Equipo">Volver</a>
 </form>
-
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }

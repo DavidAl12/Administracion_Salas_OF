@@ -1,7 +1,6 @@
 using AutoMapper;
 using Infrastructure;
 using Infrastructure.Repositories;
-using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Services;
 using Services.Automapper;
@@ -32,12 +31,14 @@ namespace MvcSample
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
 
-            // Repositorios y servicios
+            // Repositorios base
             builder.Services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
-            builder.Services.AddScoped<ISalaService, SalaService>();
-            builder.Services.AddScoped<IServicioUsuarioDashboard, ServicioUsuarioDashboard>(); // <-- AJUSTE CLAVE
             builder.Services.AddRepositories(_configuration);
 
+            // Servicios de dominio / aplicación (todos juntos en una extensión)
+            builder.Services.AddProjectServices();
+
+            // AutoMapper
             var mappingConfiguration = new MapperConfiguration(m =>
                 m.AddProfile(new MappingProfile())
             );
@@ -75,7 +76,7 @@ namespace MvcSample
             );
             app.MapRazorPages();
 
-            // SEED de roles y usuarios (admin, usuario, coordinador)
+            // ---- Seed de roles y usuarios ----
             using (var scope = app.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;

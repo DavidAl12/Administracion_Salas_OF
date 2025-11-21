@@ -21,6 +21,6 @@ namespace Domain
         public string Estado { get; set; }
 
         [StringLength(100)]
-        public string AprobadoPor { get; set; }
+        public string? AprobadoPor { get; set; }
     }
 }

@@ -1,8 +1,9 @@
-﻿using Domain;
-using Microsoft.AspNetCore.Mvc;
-using Services;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Services;
+using Servicios.Models;
+using Domain;
+using System.Threading.Tasks;
 
 namespace MvcSample.Controllers
 {
@@ -25,22 +26,26 @@ namespace MvcSample.Controllers
 
         public async Task<IActionResult> Create()
         {
-            var salas = await _salaService.GetAllAsync();
-            ViewBag.Salas = new SelectList(salas, "Id", "Nombre");
+            ViewBag.Salas = new SelectList(await _salaService.GetAllAsync(), "Id", "Nombre");
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Equipo equipo)
+        public async Task<IActionResult> Create(EquipoCreateViewModel input)
         {
             if (!ModelState.IsValid)
             {
-                var salas = await _salaService.GetAllAsync();
-                ViewBag.Salas = new SelectList(salas, "Id", "Nombre");
-                return View(equipo);
+                ViewBag.Salas = new SelectList(await _salaService.GetAllAsync(), "Id", "Nombre");
+                return View(input);
             }
 
+            var equipo = new Equipo
+            {
+                Serial = input.Serial,
+                Especificaciones = input.Especificaciones,
+                SalaId = input.SalaId
+            };
             await _equipoService.AddAsync(equipo);
             return RedirectToAction(nameof(Index));
         }
@@ -50,21 +55,34 @@ namespace MvcSample.Controllers
             var equipo = await _equipoService.GetByIdAsync(id);
             if (equipo == null) return NotFound();
 
-            var salas = await _salaService.GetAllAsync();
-            ViewBag.Salas = new SelectList(salas, "Id", "Nombre", equipo.SalaId);
-            return View(equipo);
+            var viewModel = new EquipoEditViewModel
+            {
+                Id = equipo.Id,
+                Serial = equipo.Serial,
+                Especificaciones = equipo.Especificaciones,
+                SalaId = equipo.SalaId ?? 0
+            };
+
+            ViewBag.Salas = new SelectList(await _salaService.GetAllAsync(), "Id", "Nombre", equipo.SalaId);
+            return View(viewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Equipo equipo)
+        public async Task<IActionResult> Edit(EquipoEditViewModel input)
         {
             if (!ModelState.IsValid)
             {
-                var salas = await _salaService.GetAllAsync();
-                ViewBag.Salas = new SelectList(salas, "Id", "Nombre", equipo.SalaId);
-                return View(equipo);
+                ViewBag.Salas = new SelectList(await _salaService.GetAllAsync(), "Id", "Nombre", input.SalaId);
+                return View(input);
             }
+
+            var equipo = await _equipoService.GetByIdAsync(input.Id);
+            if (equipo == null) return NotFound();
+
+            equipo.Serial = input.Serial;
+            equipo.Especificaciones = input.Especificaciones;
+            equipo.SalaId = input.SalaId;
 
             await _equipoService.UpdateAsync(equipo);
             return RedirectToAction(nameof(Index));

@@ -1,0 +1,63 @@
+﻿@model Servicios.Models.ReporteViewModel
+
+@{
+    ViewData["Title"] = "Reportar Daño";
+}
+
+<h2>Reportar Daño</h2>
+<form method="post">
+    <div class="mb-3">
+        <label>Tipo de Reporte</label>
+        <select asp-for="TipoReporte" class="form-control" id="TipoReporteSelect">
+            <option value="Equipo">Equipo de Cómputo</option>
+            <option value="Sala">Sala</option>
+        </select>
+    </div>
+
+    <div class="mb-3" id="divEquipo">
+        <label>Equipo Afectado</label>
+        <select asp-for="EquipoId" class="form-control">
+            <option value="">Seleccione un equipo</option>
+            @foreach (var eq in Model.ListaEquipos ?? new List<Servicios.Models.ReporteViewModel.EquipoSelectItem>())
+            {
+                <option value="@eq.Id">@eq.Nombre</option>
+            }
+        </select>
+    </div>
+
+    <div class="mb-3" id="divSala" style="display:none;">
+        <label>Sala Afectada</label>
+        <select asp-for="SalaId" class="form-control">
+            <option value="">Seleccione una sala</option>
+            @foreach (var sala in Model.ListaSalas ?? new List<Servicios.Models.ReporteViewModel.SalaSelectItem>())
+            {
+                <option value="@sala.Id">@sala.Nombre</option>
+            }
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label>Descripción del Daño</label>
+        <textarea asp-for="Descripcion" class="form-control"></textarea>
+    </div>
+    <div class="alert alert-warning mt-3">
+        <ul>
+            <li>Describe el problema con el mayor detalle posible</li>
+            <li>Indica si el daño afecta el equipo/sala</li>
+            <li>El reporte será atendido por el coordinador</li>
+        </ul>
+    </div>
+    <button type="submit" class="btn btn-primary">Enviar Reporte</button>
+</form>
+
+@section Scripts {
+    <script>
+        function actualizarCombos() {
+            var tipo = document.getElementById('TipoReporteSelect').value;
+            document.getElementById('divEquipo').style.display = tipo === "Equipo" ? "block" : "none";
+            document.getElementById('divSala').style.display = tipo === "Sala" ? "block" : "none";
+        }
+        document.getElementById('TipoReporteSelect').addEventListener('change', actualizarCombos);
+        actualizarCombos(); // Inicialización al cargar
+    </script>
+}

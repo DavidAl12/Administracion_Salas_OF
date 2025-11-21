@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Servicios.Models.CoordinadorReporteListViewModel>
+@{
+    ViewData["Title"] = "Reportes de Daños";
+}
+
+<h2>Reportes de Daños</h2>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Tipo</th>
+            <th>Relacionado</th>
+            <th>Descripción</th>
+            <th>Estado</th>
+            <th>Fecha</th>
+            <th>Usuario</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var r in Model)
+        {
+            <tr>
+                <td>@r.Tipo</td>
+                <td>@r.Relacionado</td>
+                <td>@r.Descripcion</td>
+                <td>@r.Estado</td>
+                <td>@r.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>@r.Usuario</td>
+                <td>
+                    <button class="btn btn-info btn-sm">Atender</button>
+                    <button class="btn btn-success btn-sm">Resolver</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
