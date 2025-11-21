@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251121025954_001")]
-    partial class _001
+    [Migration("20251121040930_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -192,6 +192,9 @@ namespace Infrastructure.Migrations
                     b.Property<int?>("SalaId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("SalaId1")
+                        .HasColumnType("int");
+
                     b.Property<string>("Tipo")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -205,6 +208,8 @@ namespace Infrastructure.Migrations
                     b.HasIndex("EquipoId");
 
                     b.HasIndex("SalaId");
+
+                    b.HasIndex("SalaId1");
 
                     b.HasIndex("UsuarioId");
 
@@ -488,13 +493,13 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.Equipo", "Equipo")
                         .WithMany()
                         .HasForeignKey("EquipoId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Domain.Usuario", "Usuario")
                         .WithMany("PrestamosEquipo")
                         .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Equipo");
@@ -525,16 +530,22 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("Domain.Equipo", "Equipo")
                         .WithMany()
-                        .HasForeignKey("EquipoId");
+                        .HasForeignKey("EquipoId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Domain.Sala", "Sala")
+                        .WithMany()
+                        .HasForeignKey("SalaId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Domain.Sala", null)
                         .WithMany("Reportes")
-                        .HasForeignKey("SalaId");
+                        .HasForeignKey("SalaId1");
 
                     b.HasOne("Domain.Usuario", "Usuario")
                         .WithMany("Reportes")
                         .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Equipo");
