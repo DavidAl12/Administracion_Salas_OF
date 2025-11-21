@@ -14,7 +14,8 @@ namespace Domain
 
         public string Estado { get; set; } = "Disponible";
 
-        // Nullable para permitir la acción ON DELETE SET NULL sin error
+        // ✔ Debe ser nullable para usar SET NULL
+        // ❌ No debe tener [Required]
         public int? SalaId { get; set; }
 
         public Sala Sala { get; set; }

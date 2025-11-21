@@ -17,48 +17,42 @@ namespace MvcSample
             var builder = WebApplication.CreateBuilder(args);
             var _configuration = builder.Configuration;
 
-            Console.WriteLine("====== CADENA DE CONEXIÓN CARGADA ======");
-            Console.WriteLine(_configuration.GetConnectionString("DefaultConnection"));
-
-            // DB CONTEXT (SQL SERVER LOCAL)
+            // DB CONTEXT
             builder.Services.AddDbContext<AppDbContext>(options =>
             {
                 var connectionString = _configuration.GetConnectionString("DefaultConnection");
                 options.UseSqlServer(connectionString);
             });
 
-            // IDENTITY FRAMEWORK
-            builder.Services.AddDefaultIdentity<Usuario>(options =>
+            // Identity con roles
+            builder.Services.AddIdentity<Usuario, IdentityRole>(options =>
             {
                 options.SignIn.RequireConfirmedAccount = false;
             })
-            .AddEntityFrameworkStores<AppDbContext>();
+            .AddEntityFrameworkStores<AppDbContext>()
+            .AddDefaultTokenProviders();
 
-            // REPOSITORIOS Y SERVICIOS
+            // Repositorios y servicios
             builder.Services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
             builder.Services.AddScoped<ISalaService, SalaService>();
+            builder.Services.AddScoped<IServicioUsuarioDashboard, ServicioUsuarioDashboard>(); // <-- AJUSTE CLAVE
             builder.Services.AddRepositories(_configuration);
 
-            // AUTOMAPPER
             var mappingConfiguration = new MapperConfiguration(m =>
                 m.AddProfile(new MappingProfile())
             );
             IMapper mapper = mappingConfiguration.CreateMapper();
             builder.Services.AddSingleton(mapper);
 
-            // CORS
-            builder.Services.AddCors(p => p.AddPolicy("CORS_Policy", builder =>
-            {
-                builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
-            }));
+            builder.Services.AddCors(p => p.AddPolicy("CORS_Policy", policy =>
+                policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
 
             builder.Services.AddControllersWithViews();
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-            builder.Services.AddRazorPages(); // necesario para Identity
+            builder.Services.AddRazorPages();
 
             var app = builder.Build();
 
-            // MIDDLEWARE
             if (app.Environment.IsDevelopment())
             {
                 app.UseMigrationsEndPoint();
@@ -68,32 +62,36 @@ namespace MvcSample
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
-
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseCors("CORS_Policy");
 
-            // 🔹 MUY IMPORTANTE: PÁGINA INICIAL = Home/Index
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}"
             );
+            app.MapRazorPages();
 
-            app.MapRazorPages(); // Identity
-
-            // SEED ADMIN
+            // SEED de roles y usuarios (admin, usuario, coordinador)
             using (var scope = app.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
                 var userManager = services.GetRequiredService<UserManager<Usuario>>();
+                var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
+                string[] requiredRoles = { "Admin", "Usuario", "Coordinador" };
+                foreach (var role in requiredRoles)
+                {
+                    if (!await roleManager.RoleExistsAsync(role))
+                        await roleManager.CreateAsync(new IdentityRole(role));
+                }
+
+                // ADMIN SEED
                 var adminEmail = "admin@correo.com";
                 var adminPassword = "Admin123$";
-
                 var adminUser = await userManager.FindByEmailAsync(adminEmail);
                 if (adminUser == null)
                 {
@@ -104,8 +102,57 @@ namespace MvcSample
                         Nombre = "Administrador",
                         Rol = "Admin"
                     };
-
                     await userManager.CreateAsync(adminUser, adminPassword);
+                    await userManager.AddToRoleAsync(adminUser, "Admin");
+                }
+                else
+                {
+                    if (!await userManager.IsInRoleAsync(adminUser, "Admin"))
+                        await userManager.AddToRoleAsync(adminUser, "Admin");
+                }
+
+                // USUARIO SEED
+                var usuarioEmail = "usuario@prueba.com";
+                var usuarioPassword = "Usuario123$";
+                var usuarioUser = await userManager.FindByEmailAsync(usuarioEmail);
+                if (usuarioUser == null)
+                {
+                    usuarioUser = new Usuario
+                    {
+                        UserName = usuarioEmail,
+                        Email = usuarioEmail,
+                        Nombre = "Usuario Prueba",
+                        Rol = "Usuario"
+                    };
+                    await userManager.CreateAsync(usuarioUser, usuarioPassword);
+                    await userManager.AddToRoleAsync(usuarioUser, "Usuario");
+                }
+                else
+                {
+                    if (!await userManager.IsInRoleAsync(usuarioUser, "Usuario"))
+                        await userManager.AddToRoleAsync(usuarioUser, "Usuario");
+                }
+
+                // COORDINADOR SEED
+                var coordinadorEmail = "coordinador@prueba.com";
+                var coordinadorPassword = "Coordinador123$";
+                var coordinadorUser = await userManager.FindByEmailAsync(coordinadorEmail);
+                if (coordinadorUser == null)
+                {
+                    coordinadorUser = new Usuario
+                    {
+                        UserName = coordinadorEmail,
+                        Email = coordinadorEmail,
+                        Nombre = "Coordinador Prueba",
+                        Rol = "Coordinador"
+                    };
+                    await userManager.CreateAsync(coordinadorUser, coordinadorPassword);
+                    await userManager.AddToRoleAsync(coordinadorUser, "Coordinador");
+                }
+                else
+                {
+                    if (!await userManager.IsInRoleAsync(coordinadorUser, "Coordinador"))
+                        await userManager.AddToRoleAsync(coordinadorUser, "Coordinador");
                 }
             }
 

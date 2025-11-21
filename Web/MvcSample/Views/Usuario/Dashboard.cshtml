@@ -1,0 +1,94 @@
+﻿@model Servicios.Models.UsuarioDashboardViewModel
+
+@{
+    ViewData["Title"] = "Panel de Usuario";
+}
+
+<h1>@ViewData["Title"]</h1>
+<p>Consulta salas, solicita equipos y reporta incidencias</p>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-header">Reservas Activas</div>
+            <div class="card-body">
+                <h2>@Model.ReservasActivas</h2>
+                <p>De @Model.TotalReservas reservas totales</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center border-warning">
+            <div class="card-header">Reportes Pendientes</div>
+            <div class="card-body">
+                <h2>@Model.ReportesPendientes</h2>
+                <p>De @Model.TotalReportes reportes totales</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-header">Asesorías Pendientes</div>
+            <div class="card-body">
+                <h2>@Model.AsesoriasPendientes</h2>
+                <p>De @Model.TotalAsesorias solicitudes totales</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <a class="btn btn-outline-primary w-100" asp-controller="Sala" asp-action="Index">Consultar Salas</a>
+                <p class="mt-2 mb-0">Ver estado de las salas</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <a class="btn btn-outline-primary w-100" asp-controller="Equipo" asp-action="Solicitar">Solicitar Recurso</a>
+                <p class="mt-2 mb-0">Reservar un recurso</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <a class="btn btn-outline-warning w-100" asp-controller="Reporte" asp-action="Crear">Reportar Daño</a>
+                <p class="mt-2 mb-0">Informar incidencias</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <a class="btn btn-outline-info w-100" asp-controller="Asesoria" asp-action="Solicitar">Solicitar Asesoría</a>
+                <p class="mt-2 mb-0">Ayuda técnica</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card text-center">
+            <div class="card-header">Equipos Disponibles</div>
+            <div class="card-body">
+                <h2>@Model.EquiposDisponibles</h2>
+                <p>De @Model.EquiposTotales equipos totales</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card text-center">
+            <div class="card-header">Salas Disponibles</div>
+            <div class="card-body">
+                <h2>@Model.SalasDisponibles</h2>
+                <p>De @Model.SalasTotales salas totales</p>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,23 +1,21 @@
 ﻿using Domain;
-using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace MvcSample.Areas.Identity.Pages.Account
 {
-    [Authorize(Roles = "Admin")] // 🔹 solo el admin podrá crear usuarios aquí (desactiva temporalmente mientras creas el primero, si quieres)
+    [Authorize(Roles = "Admin")] // Solo admin puede acceder aquí
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<Usuario> _signInManager;
@@ -26,13 +24,15 @@ namespace MvcSample.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<Usuario> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public RegisterModel(
             UserManager<Usuario> userManager,
             IUserStore<Usuario> userStore,
             SignInManager<Usuario> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -40,6 +40,7 @@ namespace MvcSample.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _roleManager = roleManager;
         }
 
         [BindProperty]
@@ -60,14 +61,14 @@ namespace MvcSample.Areas.Identity.Pages.Account
             public string Nombre { get; set; }
 
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(100, ErrorMessage = "La contraseña debe tener al menos {2} y máximo {1} caracteres.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
             public string Password { get; set; }
 
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Display(Name = "Confirmar contraseña")]
+            [Compare("Password", ErrorMessage = "Las contraseñas no coinciden.")]
             public string ConfirmPassword { get; set; }
         }
 
@@ -90,34 +91,26 @@ namespace MvcSample.Areas.Identity.Pages.Account
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
 
                 user.Nombre = Input.Nombre;
-                user.Rol = "User"; // 🔹 rol por defecto para usuarios creados por admin
+                user.Rol = "Usuario"; // El rol para Identity, debe coincidir con el sistema
+
+                // Asegura que el rol exista en Identity antes de asignarlo
+                if (!await _roleManager.RoleExistsAsync("Usuario"))
+                    await _roleManager.CreateAsync(new IdentityRole("Usuario"));
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User created a new account with password.");
+                    // ASIGNA EL ROL EN IDENTITY
+                    await _userManager.AddToRoleAsync(user, "Usuario");
 
-                    var userId = await _userManager.GetUserIdAsync(user);
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                    var callbackUrl = Url.Page(
-                        "/Account/ConfirmEmail",
-                        pageHandler: null,
-                        values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
-                        protocol: Request.Scheme);
+                    _logger.LogInformation("Usuario creado y rol asignado correctamente.");
 
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-
-                    // Para flujo admin, normalmente no se hace SignIn del nuevo usuario
                     return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
                 }
 
                 foreach (var error in result.Errors)
-                {
                     ModelState.AddModelError(string.Empty, error.Description);
-                }
             }
 
             return Page();
@@ -131,18 +124,14 @@ namespace MvcSample.Areas.Identity.Pages.Account
             }
             catch
             {
-                throw new InvalidOperationException($"Can't create an instance of '{nameof(Usuario)}'. " +
-                    $"Ensure that '{nameof(Usuario)}' is not an abstract class and has a parameterless constructor, or alternatively " +
-                    $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
+                throw new InvalidOperationException($"No se puede crear una instancia de '{nameof(Usuario)}'.");
             }
         }
 
         private IUserEmailStore<Usuario> GetEmailStore()
         {
             if (!_userManager.SupportsUserEmail)
-            {
-                throw new NotSupportedException("The default UI requires a user store with email support.");
-            }
+                throw new NotSupportedException("El UserStore debe soportar emails.");
             return (IUserEmailStore<Usuario>)_userStore;
         }
     }

@@ -3,10 +3,7 @@
 <h2 class="fw-bold mb-4">Registrar Equipo</h2>
 
 <form asp-action="Create" asp-controller="Equipo" method="post">
-
     <div asp-validation-summary="All" class="text-danger"></div>
-
-    <a class="btn btn-secondary mt-3" href="/Admin/Dashboard">Volver</a>
 
     <div class="mb-3">
         <label>Serial del Equipo</label>
@@ -23,7 +20,6 @@
     <div class="mb-3">
         <label>Sala</label>
         <select asp-for="SalaId" class="form-control">
-            <option value="">-- Seleccione una sala --</option>
             @foreach (var sala in ViewBag.Salas)
             {
                 <option value="@sala.Id">@sala.Nombre</option>
