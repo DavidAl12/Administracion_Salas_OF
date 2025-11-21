@@ -1,7 +1,13 @@
 ﻿@model IEnumerable<Domain.Sala>
 
 <h2 class="fw-bold mb-4">Salas</h2>
-<a class="btn btn-primary mb-3" href="/Sala/Create">Crear Nueva Sala</a>
+
+<a class="btn btn-outline-secondary mb-3 me-2" href="@Url.Action("Dashboard", "Admin")">
+    <i class="bi bi-arrow-left"></i> Volver al Dashboard
+</a>
+
+<a class="btn btn-primary mb-3" href="/Sala/Create">Crear Nueva Sala +</a>
+
 <table class="table table-bordered table-striped">
     <thead>
         <tr>
@@ -30,3 +36,4 @@
         }
     </tbody>
 </table>
+

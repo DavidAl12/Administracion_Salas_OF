@@ -238,7 +238,7 @@ namespace Infrastructure.Migrations
                     FechaInicio = table.Column<DateTime>(type: "datetime2", nullable: false),
                     FechaFin = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Estado = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AprobadoPor = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    AprobadoPor = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -268,7 +268,7 @@ namespace Infrastructure.Migrations
                     FechaInicio = table.Column<DateTime>(type: "datetime2", nullable: false),
                     FechaFin = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Estado = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    AprobadoPor = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                    AprobadoPor = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
                 },
                 constraints: table =>
                 {
