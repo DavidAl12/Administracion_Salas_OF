@@ -1,0 +1,89 @@
+﻿@model IEnumerable<Servicios.Models.CoordinadorAsesoriaListViewModel>
+
+@{
+    ViewData["Title"] = "Solicitudes de Asesoría Técnica";
+}
+<h2>Solicitudes de Asesoría Técnica</h2>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Usuario</th>
+            <th>Fecha y Hora Preferida</th>
+            <th>Descripción</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var a in Model)
+        {
+            <tr id="asesoria-@a.Id">
+                <td>@a.Usuario</td>
+                <td>@a.FechaPreferida.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>@a.Descripcion</td>
+                <td class="estado">
+                    @if (a.Estado == "Pendiente")
+                    {
+                        <span class="badge bg-secondary">Pendiente</span>
+                    }
+                    else if (a.Estado == "Aceptada")
+                    {
+                        <span class="badge bg-success">Aceptada</span>
+                    }
+                    else if (a.Estado == "Rechazada")
+                    {
+                        <span class="badge bg-danger">Rechazada</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-dark">@a.Estado</span>
+                    }
+                </td>
+                <td class="acciones">
+                    <div class="acciones-contenido">
+                        @if (a.Estado == "Pendiente")
+                        {
+                            <button class="btn btn-success btn-sm btn-accion"
+                                    data-id="@a.Id"
+                                    data-estado="Aceptada">
+                                Aceptar
+                            </button>
+                            <button class="btn btn-danger btn-sm btn-accion"
+                                    data-id="@a.Id"
+                                    data-estado="Rechazada">
+                                Rechazar
+                            </button>
+                        }
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).on("click", ".btn-accion", function () {
+            var id = $(this).data("id");
+            var estado = $(this).data("estado");
+            $.ajax({
+                url: '@Url.Action("CambiarEstadoAsesoria", "Coordinador")',
+                type: 'POST',
+                data: { id: id, estado: estado },
+                success: function (response) {
+                    if (response.success) {
+                        let badgeClass = "bg-secondary";
+                        if (response.nuevoEstado === "Aceptada") badgeClass = "bg-success";
+                        if (response.nuevoEstado === "Rechazada") badgeClass = "bg-danger";
+                        $("#asesoria-" + id + " .estado").html(`<span class="badge ${badgeClass}">${response.nuevoEstado}</span>`);
+                        $("#asesoria-" + id + " .acciones .acciones-contenido").html(""); // Oculta acciones después del cambio
+                    }
+                },
+                error: function () {
+                    alert("Error al actualizar la asesoría.");
+                }
+            });
+        });
+    </script>
+}

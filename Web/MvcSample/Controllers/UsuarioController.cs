@@ -219,6 +219,18 @@ public class UsuarioController : Controller
         if (!ModelState.IsValid)
             return View(model);
 
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        var asesoria = new Domain.Asesoria
+        {
+            Fecha = model.FechaPreferida,
+            Descripcion = model.Descripcion,
+            Estado = "Pendiente",
+            UsuarioId = userId
+        };
+
+        await _asesoriaService.AddAsync(asesoria);
+
         TempData["Success"] = "Asesoría solicitada correctamente";
         return RedirectToAction("Dashboard");
     }

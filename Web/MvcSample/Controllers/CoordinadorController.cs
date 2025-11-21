@@ -7,6 +7,7 @@ using Servicios.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 [Authorize(Roles = "Coordinador")]
@@ -17,6 +18,7 @@ public class CoordinadorController : Controller
     private readonly IPrestamoEquipoService _prestamoEquipoService;
     private readonly IPrestamoSalaService _prestamoSalaService;
     private readonly IReporteService _reporteService;
+    private readonly IAsesoriaService _asesoriaService;
     private readonly UserManager<Usuario> _userManager;
 
     public CoordinadorController(
@@ -25,14 +27,15 @@ public class CoordinadorController : Controller
         IPrestamoEquipoService prestamoEquipoService,
         IPrestamoSalaService prestamoSalaService,
         IReporteService reporteService,
-        UserManager<Usuario> userManager
-    )
+        IAsesoriaService asesoriaService,
+        UserManager<Usuario> userManager)
     {
         _equipoService = equipoService;
         _salaService = salaService;
         _prestamoEquipoService = prestamoEquipoService;
         _prestamoSalaService = prestamoSalaService;
         _reporteService = reporteService;
+        _asesoriaService = asesoriaService;
         _userManager = userManager;
     }
 
@@ -227,6 +230,42 @@ public class CoordinadorController : Controller
         {
             reporte.Estado = estado;
             await _reporteService.UpdateAsync(reporte);
+            return Json(new { success = true, nuevoEstado = estado });
+        }
+        return Json(new { success = false });
+    }
+
+    // ----- SECCIÓN ASESORÍAS -----
+    public async Task<IActionResult> Asesorias()
+    {
+        var asesorias = await _asesoriaService.GetAllAsync();
+        var userIds = asesorias.Select(a => a.UsuarioId).Distinct().ToList();
+        var userDict = new Dictionary<string, string>();
+        foreach (var userId in userIds)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            userDict[userId] = user?.Nombre ?? user?.UserName ?? userId ?? "";
+        }
+        var model = asesorias.Select(a => new CoordinadorAsesoriaListViewModel
+        {
+            Id = a.Id,
+            FechaPreferida = a.Fecha,
+            Descripcion = a.Descripcion,
+            Estado = a.Estado,
+            Usuario = userDict.ContainsKey(a.UsuarioId) ? userDict[a.UsuarioId] : a.UsuarioId ?? ""
+        }).ToList();
+        return View(model);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CambiarEstadoAsesoria(int id, string estado)
+    {
+        var asesoria = await _asesoriaService.GetByIdAsync(id);
+        if (asesoria != null)
+        {
+            asesoria.Estado = estado;
+            asesoria.CoordinadorId = User.FindFirstValue(System.Security.Claims.ClaimTypes.NameIdentifier);
+            await _asesoriaService.UpdateAsync(asesoria);
             return Json(new { success = true, nuevoEstado = estado });
         }
         return Json(new { success = false });
