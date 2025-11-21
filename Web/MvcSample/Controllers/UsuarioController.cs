@@ -1,11 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Services;
 using Servicios.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System;
 
+[Authorize(Roles = "Usuario")]
 public class UsuarioController : Controller
 {
     private readonly ISalaService _salaService;
@@ -176,19 +179,19 @@ public class UsuarioController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> ReportarDaño(ReporteViewModel model)
     {
+        model.ListaEquipos = (await _equipoService.GetAllAsync())
+            .Select(e => new ReporteViewModel.EquipoSelectItem { Id = e.Id, Nombre = e.Serial }).ToList();
+        model.ListaSalas = (await _salaService.GetAllAsync())
+            .Select(s => new ReporteViewModel.SalaSelectItem { Id = s.Id, Nombre = s.Nombre }).ToList();
+
         if (!ModelState.IsValid)
-        {
-            model.ListaEquipos = (await _equipoService.GetAllAsync())
-                .Select(e => new ReporteViewModel.EquipoSelectItem { Id = e.Id, Nombre = e.Serial }).ToList();
-            model.ListaSalas = (await _salaService.GetAllAsync())
-                .Select(s => new ReporteViewModel.SalaSelectItem { Id = s.Id, Nombre = s.Nombre }).ToList();
             return View(model);
-        }
 
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         var reporte = new Domain.Reporte
         {
+            Tipo = model.TipoReporte,
             Descripcion = model.Descripcion,
             Estado = "Pendiente",
             Fecha = DateTime.Now,
@@ -215,9 +218,6 @@ public class UsuarioController : Controller
     {
         if (!ModelState.IsValid)
             return View(model);
-
-        // Puedes implementar la creación de la asesoría en AsesoriaService aquí si lo necesitas.
-        // await _asesoriaService.AddAsync(new Asesoria { ... });
 
         TempData["Success"] = "Asesoría solicitada correctamente";
         return RedirectToAction("Dashboard");

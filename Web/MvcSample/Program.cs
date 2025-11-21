@@ -39,7 +39,7 @@ namespace MvcSample
             var connectionString = _configuration.GetConnectionString("DefaultConnection");
 
             // Servicios de dominio / aplicación (todos juntos en una extensión)
-            builder.Services.AddProjectServices(connectionString); // <-- AJUSTE AQUÍ
+            builder.Services.AddProjectServices(connectionString);
 
             // AutoMapper
             var mappingConfiguration = new MapperConfiguration(m =>
@@ -66,11 +66,14 @@ namespace MvcSample
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
-            app.UseAuthentication();
+
+            app.UseAuthentication();    // Este debe ir antes de Authorization y Routing
             app.UseAuthorization();
+
             app.UseCors("CORS_Policy");
 
             app.MapControllerRoute(

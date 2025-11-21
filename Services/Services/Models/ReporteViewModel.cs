@@ -4,13 +4,14 @@ namespace Servicios.Models
 {
     public class ReporteViewModel
     {
-        public string TipoReporte { get; set; }    // "Equipo" o "Sala"
+        public string TipoReporte { get; set; }
         public int? EquipoId { get; set; }
         public int? SalaId { get; set; }
         public string Descripcion { get; set; }
 
-        public List<EquipoSelectItem> ListaEquipos { get; set; }
-        public List<SalaSelectItem> ListaSalas { get; set; }
+        // NO USAR [Required]
+        public List<EquipoSelectItem> ListaEquipos { get; set; } = new List<EquipoSelectItem>();
+        public List<SalaSelectItem> ListaSalas { get; set; } = new List<SalaSelectItem>();
 
         public class EquipoSelectItem
         {

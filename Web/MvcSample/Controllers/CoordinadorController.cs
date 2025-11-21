@@ -1,13 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Servicios.Models;
+using Microsoft.AspNetCore.Mvc;
 using Services;
-using Domain;
+using Servicios.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 
+[Authorize(Roles = "Coordinador")]
 public class CoordinadorController : Controller
 {
     private readonly IEquipoService _equipoService;
@@ -181,7 +183,8 @@ public class CoordinadorController : Controller
 
     public async Task<IActionResult> Reportes()
     {
-        var reportes = await _reporteService.GetAllAsync();
+        var reportes = await _reporteService.GetAllIncludingAsync();
+
         var allUserIds = reportes.Select(r => r.UsuarioId)
             .Where(id => !string.IsNullOrEmpty(id))
             .Distinct().ToList();
@@ -196,10 +199,16 @@ public class CoordinadorController : Controller
         var model = reportes.Select(r =>
         {
             var nombreUsuario = userDict.ContainsKey(r.UsuarioId) ? userDict[r.UsuarioId] : r.UsuarioId ?? "";
+            string relacionado = "";
+            if (r.EquipoId.HasValue && r.Equipo != null)
+                relacionado = r.Equipo.Serial;
+            else if (r.SalaId.HasValue && r.Sala != null)
+                relacionado = r.Sala.Nombre;
+
             return new CoordinadorReporteListViewModel
             {
                 Tipo = r.EquipoId.HasValue ? "equipo" : "sala",
-                Relacionado = r.EquipoId.HasValue ? (r.Equipo?.Serial ?? "") : (r.Sala?.Nombre ?? ""),
+                Relacionado = relacionado,
                 Descripcion = r.Descripcion,
                 Estado = r.Estado,
                 Fecha = r.Fecha,
