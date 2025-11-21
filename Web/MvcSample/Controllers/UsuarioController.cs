@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Services;
 using Servicios.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -79,10 +78,9 @@ public class UsuarioController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> SolicitarSala(SolicitarSalaViewModel model)
     {
-        var salas = (await _salaService.GetAllAsync())
+        model.SalasDisponibles = (await _salaService.GetAllAsync())
             .Select(s => (s.Id, s.Nombre)).ToList();
 
-        model.SalasDisponibles = salas;
         if (!ModelState.IsValid)
             return View(model);
 
@@ -105,8 +103,7 @@ public class UsuarioController : Controller
 
     public async Task<IActionResult> SolicitarEquipo()
     {
-        var salas = (await _salaService.GetAllAsync())
-            .Select(s => (s.Id, s.Nombre)).ToList();
+        var salas = (await _salaService.GetAllAsync()).Select(s => (s.Id, s.Nombre)).ToList();
 
         var model = new SolicitarEquipoViewModel
         {
@@ -120,18 +117,20 @@ public class UsuarioController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> SolicitarEquipo(SolicitarEquipoViewModel model)
     {
-        var salas = (await _salaService.GetAllAsync()).Select(s => (s.Id, s.Nombre)).ToList();
-        var equipos = new List<SolicitarEquipoViewModel.EquipoItem>();
+        model.SalasDisponibles = (await _salaService.GetAllAsync()).Select(s => (s.Id, s.Nombre)).ToList();
 
         if (model.SalaId > 0)
         {
-            equipos = (await _equipoService.GetAllAsync())
+            model.EquiposDisponibles = (await _equipoService.GetAllAsync())
                 .Where(e => e.SalaId == model.SalaId && e.Estado == "Disponible")
-                .Select(e => new SolicitarEquipoViewModel.EquipoItem { Id = e.Id, Serial = e.Serial }).ToList();
+                .Select(e => new SolicitarEquipoViewModel.EquipoItem { Id = e.Id, Serial = e.Serial })
+                .ToList();
+        }
+        else
+        {
+            model.EquiposDisponibles = new List<SolicitarEquipoViewModel.EquipoItem>();
         }
 
-        model.SalasDisponibles = salas;
-        model.EquiposDisponibles = equipos;
         if (!ModelState.IsValid)
             return View(model);
 
@@ -167,7 +166,6 @@ public class UsuarioController : Controller
         {
             ListaEquipos = (await _equipoService.GetAllAsync())
                 .Select(e => new ReporteViewModel.EquipoSelectItem { Id = e.Id, Nombre = e.Serial }).ToList(),
-
             ListaSalas = (await _salaService.GetAllAsync())
                 .Select(s => new ReporteViewModel.SalaSelectItem { Id = s.Id, Nombre = s.Nombre }).ToList()
         };
@@ -182,16 +180,27 @@ public class UsuarioController : Controller
         {
             model.ListaEquipos = (await _equipoService.GetAllAsync())
                 .Select(e => new ReporteViewModel.EquipoSelectItem { Id = e.Id, Nombre = e.Serial }).ToList();
-
             model.ListaSalas = (await _salaService.GetAllAsync())
                 .Select(s => new ReporteViewModel.SalaSelectItem { Id = s.Id, Nombre = s.Nombre }).ToList();
-
             return View(model);
         }
-        // await _reporteService.CreateAsync(new Reporte { ... });
 
-        TempData["Success"] = "Reporte enviado correctamente";
-        return RedirectToAction(nameof(Dashboard));
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        var reporte = new Domain.Reporte
+        {
+            Descripcion = model.Descripcion,
+            Estado = "Pendiente",
+            Fecha = DateTime.Now,
+            UsuarioId = userId,
+            EquipoId = model.TipoReporte == "Equipo" ? model.EquipoId : null,
+            SalaId = model.TipoReporte == "Sala" ? model.SalaId : null
+        };
+
+        await _reporteService.AddAsync(reporte);
+
+        TempData["Success"] = "Reporte enviado correctamente y será revisado por el coordinador.";
+        return RedirectToAction("Dashboard");
     }
 
     public IActionResult SolicitarAsesoria()
@@ -207,28 +216,25 @@ public class UsuarioController : Controller
         if (!ModelState.IsValid)
             return View(model);
 
-        // await _asesoriaService.CreateAsync(new Asesoria { ... });
+        // Puedes implementar la creación de la asesoría en AsesoriaService aquí si lo necesitas.
+        // await _asesoriaService.AddAsync(new Asesoria { ... });
 
         TempData["Success"] = "Asesoría solicitada correctamente";
-        return RedirectToAction(nameof(Dashboard));
+        return RedirectToAction("Dashboard");
     }
 
-    // MIS RESERVAS AJUSTADO PARA RESOLVER TODO EN MEMORIA
     public async Task<IActionResult> MisReservas()
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        // Trae los préstamos (sólo con IDs)
         var prestamosEquipo = (await _prestamoEquipoService.GetAllAsync())
             .Where(p => p.UsuarioId == userId).ToList();
         var prestamosSala = (await _prestamoSalaService.GetAllAsync())
             .Where(p => p.UsuarioId == userId).ToList();
 
-        // Trae los equipos y salas para resolver navegación
         var equipos = (await _equipoService.GetAllAsync()).ToList();
         var salas = (await _salaService.GetAllAsync()).ToList();
 
-        // Historial de préstamos de equipo
         var historialEquipos = prestamosEquipo.Select(p =>
         {
             var equipo = equipos.FirstOrDefault(e => e.Id == p.EquipoId);
@@ -248,7 +254,6 @@ public class UsuarioController : Controller
             };
         });
 
-        // Historial de préstamos de sala
         var historialSalas = prestamosSala.Select(p =>
         {
             var sala = salas.FirstOrDefault(s => s.Id == p.SalaId);
