@@ -19,18 +19,74 @@
     <tbody>
         @foreach (var s in Model)
         {
-            <tr>
+            <tr id="solicitud-@s.SolicitudId">
                 <td>@s.Tipo</td>
                 <td>@s.Recurso</td>
                 <td>@s.Usuario</td>
                 <td>@s.FechaInicio.ToString("dd/MM/yyyy HH:mm")</td>
                 <td>@s.FechaFin.ToString("dd/MM/yyyy HH:mm")</td>
-                <td>@s.Estado</td>
-                <td>
-                    <button class="btn btn-success btn-sm">Aprobar</button>
-                    <button class="btn btn-danger btn-sm">Rechazar</button>
+                <td class="estado">@s.Estado</td>
+                <td class="acciones">
+                    <div class="acciones-contenido">
+                        <button class="btn btn-success btn-sm btn-accion"
+                                data-id="@s.SolicitudId"
+                                data-tipo="@s.Tipo"
+                                data-estado="Aprobado">
+                            Aprobar
+                        </button>
+                        <button class="btn btn-danger btn-sm btn-accion"
+                                data-id="@s.SolicitudId"
+                                data-tipo="@s.Tipo"
+                                data-estado="Rechazado">
+                            Rechazar
+                        </button>
+                    </div>
                 </td>
             </tr>
         }
+
     </tbody>
 </table>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Delegación para botones Aprobar/Rechazar
+                $(document).on("click", ".btn-accion", function () {
+            var id = $(this).data("id");
+            var tipo = $(this).data("tipo");
+            var estado = $(this).data("estado");
+
+            $.ajax({
+                url: '@Url.Action("CambiarEstado", "Coordinador")',
+                type: 'POST',
+                data: { id: id, tipo: tipo, estado: estado },
+                success: function (response) {
+                    if (response.success) {
+                        $("#solicitud-" + id + " .estado").text(response.nuevoEstado);
+                        $("#solicitud-" + id + " .acciones .acciones-contenido").html(
+                            `<button class="btn btn-primary btn-sm btn-toggle" data-id="${id}" data-tipo="${tipo}">Acciones</button>`
+                        );
+                    }
+                },
+                error: function () {
+                    alert("Error al actualizar la solicitud.");
+                }
+            });
+        });
+
+        $(document).on("click", ".btn-toggle", function () {
+            var id = $(this).data("id");
+            var tipo = $(this).data("tipo");
+
+            var botones = `
+                <button class="btn btn-success btn-sm btn-accion" data-id="${id}" data-tipo="${tipo}" data-estado="Aprobado">Aprobar</button>
+                <button class="btn btn-danger btn-sm btn-accion" data-id="${id}" data-tipo="${tipo}" data-estado="Rechazado">Rechazar</button>
+            `;
+
+            $("#solicitud-" + id + " .acciones .acciones-contenido").html(botones);
+            $("#solicitud-" + id + " .estado").text("Pendiente");
+        });
+
+    </script>
+}
