@@ -187,6 +187,36 @@ public class CoordinadorController : Controller
         }).ToList();
         return View(model);
     }
+    [HttpPost]
+    [HttpPost]
+    public async Task<IActionResult> CambiarEstado(int id, string tipo, string estado)
+    {
+        bool actualizado = false;
+
+        if (tipo == "Equipo")
+        {
+            var solicitud = await _prestamoEquipoService.GetByIdAsync(id);
+            if (solicitud != null)
+            {
+                solicitud.Estado = estado;
+                await _prestamoEquipoService.UpdateAsync(solicitud);
+                actualizado = true;
+            }
+        }
+        else if (tipo == "Sala")
+        {
+            var solicitud = await _prestamoSalaService.GetByIdAsync(id);
+            if (solicitud != null)
+            {
+                solicitud.Estado = estado;
+                await _prestamoSalaService.UpdateAsync(solicitud);
+                actualizado = true;
+            }
+        }
+
+        return Json(new { success = actualizado, nuevoEstado = estado });
+    }
+
 
     public IActionResult Informes()
     {
