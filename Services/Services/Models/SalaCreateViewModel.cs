@@ -16,6 +16,6 @@ namespace Servicios.Models
         [Required]
         public string Estado { get; set; }
 
-        public string Responsable { get; set; }
+        public string? Responsable { get; set; }
     }
 }

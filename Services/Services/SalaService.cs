@@ -17,18 +17,18 @@ namespace Services
 
         public async Task<IEnumerable<Sala>> GetAllAsync()
         {
-            // Si quieres cargar relaciones (equipos, prestamos...):
-            // return await _context.Salas.Include(s => s.Equipos).ToListAsync();
-
-            return await _context.Salas.ToListAsync();
+            return await _context.Salas
+                .Include(s => s.Equipos)
+                .ToListAsync();
         }
 
         public async Task<Sala> GetByIdAsync(int id)
         {
             return await _context.Salas
-                //.Include(s => s.Equipos) // Incluye si lo necesitas
+                .Include(s => s.Equipos)
                 .FirstOrDefaultAsync(s => s.Id == id);
         }
+
 
         public async Task AddAsync(Sala sala)
         {

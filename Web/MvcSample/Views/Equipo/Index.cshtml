@@ -1,31 +1,101 @@
 ﻿@model IEnumerable<Domain.Equipo>
 
-<h2 class="fw-bold mb-4">Equipos Registrados</h2>
+<link rel="stylesheet" href="~/css/indexEquipo.css" />
 
-<a class="btn btn-primary mb-3" href="/Equipo/Create">Registrar Equipo</a>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Serial</th>
-            <th>Especificaciones</th>
-            <th>Sala</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var eq in Model)
-        {
-            <tr>
-                <td>@eq.Serial</td>
-                <td>@eq.Especificaciones</td>
-                <td>@eq.Sala?.Nombre</td> <!-- Aquí ya aparecerá el nombre de la sala -->
-                <td>@eq.Estado</td>
-                <td>
-                    <a class="btn btn-warning btn-sm" href="/Equipo/Edit/@eq.Id">Editar</a>
-                    <a class="btn btn-danger btn-sm" href="/Equipo/Delete/@eq.Id">Eliminar</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div class="usc-dashboard container mt-4 equipos-page">
+
+    <!-- TÍTULO PRINCIPAL -->
+    <div class="mb-4">
+        <h2 class="usc-title-primary">Gestión de Equipos</h2>
+        <p class="usc-subtitle-primary">Administra los equipos de cómputo de las salas</p>
+    </div>
+
+    <!-- PESTAÑAS -->
+    <ul class="nav usc-tabs justify-content-center mb-4">
+        <li class="nav-item">
+            <a class="nav-link usc-tab-item" href="/Admin/Dashboard">Resumen</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link usc-tab-item" href="/Sala">Salas</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link usc-tab-item active" href="/Equipo">Equipos</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link usc-tab-item" href="/Usuarios">Usuarios</a>
+        </li>
+    </ul>
+
+    <!-- CARD ENCABEZADO -->
+    <div class="card shadow-sm p-4 equipos-card-header">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h4 class="header-title m-0">Equipos Registrados</h4>
+                <small class="header-subtitle">Listado de todos los equipos de la USC</small>
+            </div>
+
+            <a class="btn btn-primary btn-add-equipo" href="/Equipo/Create">
+                <i class="bi bi-plus-circle"></i> Registrar Equipo
+            </a>
+        </div>
+    </div>
+
+    <!-- TABLA DE EQUIPOS -->
+    <div class="card shadow-sm p-4 equipos-table-card">
+        <table class="table equipos-table align-middle">
+            <thead>
+                <tr>
+                    <th>Serial</th>
+                    <th>Especificaciones</th>
+                    <th>Sala</th>
+                    <th>Estado</th>
+                    <th class="text-end">Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var eq in Model)
+                {
+                    <tr>
+                        <td>@eq.Serial</td>
+                        <td>@eq.Especificaciones</td>
+                        <td>@eq.Sala?.Nombre</td>
+
+                        <td>
+                            @{
+                                var est = eq.Estado?.ToLower() ?? "";
+                            }
+
+                            @if (est == "disponible")
+                            {
+                                <span class="usc-badge-green">Disponible</span>
+                            }
+                            else if (est == "dañado" || est == "fuera de servicio")
+                            {
+                                <span class="usc-badge-red">Dañado</span>
+                            }
+                            else if (est.Contains("mantenimiento"))
+                            {
+                                <span class="usc-badge-yellow">Mantenimiento</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">@eq.Estado</span>
+                            }
+                        </td>
+
+                        <td class="text-end">
+                            <a class="btn btn-outline-primary btn-sm" href="/Equipo/Edit/@eq.Id">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a class="btn btn-outline-danger btn-sm" href="/Equipo/Delete/@eq.Id">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>
