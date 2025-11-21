@@ -25,7 +25,25 @@
                 <td>@s.Usuario</td>
                 <td>@s.FechaInicio.ToString("dd/MM/yyyy HH:mm")</td>
                 <td>@s.FechaFin.ToString("dd/MM/yyyy HH:mm")</td>
-                <td class="estado">@s.Estado</td>
+                <td class="estado">
+                    @if (s.Estado == "Pendiente")
+                    {
+                        <span class="badge bg-secondary">Pendiente</span>
+                    }
+                    else if (s.Estado == "Aprobado")
+                    {
+                        <span class="badge bg-success">Aprobado</span>
+                    }
+                    else if (s.Estado == "Rechazado")
+                    {
+                        <span class="badge bg-danger">Rechazado</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-dark">@s.Estado</span>
+                    }
+                </td>
+
                 <td class="acciones">
                     <div class="acciones-contenido">
                         <button class="btn btn-success btn-sm btn-accion"
@@ -63,7 +81,12 @@
                 data: { id: id, tipo: tipo, estado: estado },
                 success: function (response) {
                     if (response.success) {
-                        $("#solicitud-" + id + " .estado").text(response.nuevoEstado);
+                                let badgeClass = "bg-secondary";
+                            if (response.nuevoEstado === "Aprobado") badgeClass = "bg-success";
+                            else if (response.nuevoEstado === "Rechazado") badgeClass = "bg-danger";
+
+                            $("#solicitud-" + id + " .estado").html(`<span class="badge ${badgeClass}">${response.nuevoEstado}</span>`);
+
                         $("#solicitud-" + id + " .acciones .acciones-contenido").html(
                             `<button class="btn btn-primary btn-sm btn-toggle" data-id="${id}" data-tipo="${tipo}">Acciones</button>`
                         );
@@ -85,7 +108,8 @@
             `;
 
             $("#solicitud-" + id + " .acciones .acciones-contenido").html(botones);
-            $("#solicitud-" + id + " .estado").text("Pendiente");
+            $("#solicitud-" + id + " .estado").html(`<span class="badge bg-secondary">Pendiente</span>`);
+
         });
 
     </script>
