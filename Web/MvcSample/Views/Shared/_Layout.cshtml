@@ -13,43 +13,46 @@
 
 </head>
 <body>
-    <header class="usc-header">
-        <div class="usc-header-left d-flex align-items-center">
-            <img src="~/img/usc_logo.png" class="usc-logo" />
+    @if (!(ViewContext.RouteData.Values["Page"]?.ToString().Contains("/Account/Login") ?? false))
+    {
+        <header class="usc-header">
+            <div class="usc-header-left d-flex align-items-center">
+                <img src="~/img/usc_logo.png" class="usc-logo" />
 
-            <div class="usc-title-group ms-3">
-                <span class="usc-title">Sistema de Gestión de Salas</span>
-                <span class="usc-subtitle">Universidad Santiago de Cali</span>
-            </div>
-        </div>
-
-        <div class="usc-header-right d-flex align-items-center">
-
-            <!-- 🔹 Mostrar Login o Logout según autenticación -->
-            @if (User.Identity != null && User.Identity.IsAuthenticated)
-            {
-                <!-- Usuario AUTENTICADO -->
-                <div class="usc-user-info text-end me-3">
-                    <span class="usc-user-name">Hola, @User.Identity.Name</span>
+                <div class="usc-title-group ms-3">
+                    <span class="usc-title">Sistema de Gestión de Salas</span>
+                    <span class="usc-subtitle">Universidad Santiago de Cali</span>
                 </div>
+            </div>
 
-                <form class="m-0"
-                      asp-area="Identity"
-                      asp-page="/Account/Logout"
-                      asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })"
-                      method="post">
-                    <button type="submit" class="btn usc-btn-logout">Cerrar Sesión</button>
-                </form>
-            }
-            else
-            {
-                <!-- Usuario NO autenticado -->
-                <a class="btn usc-btn-logout" asp-area="Identity" asp-page="/Account/Login">
-                    Iniciar sesión
-                </a>
-            }
-        </div>
-    </header>
+            <div class="usc-header-right d-flex align-items-center">
+
+                <!-- 🔹 Mostrar Login o Logout según autenticación -->
+                @if (User.Identity != null && User.Identity.IsAuthenticated)
+                {
+                    <!-- Usuario AUTENTICADO -->
+                    <div class="usc-user-info text-end me-3">
+                        <span class="usc-user-name">Hola, @User.Identity.Name</span>
+                    </div>
+
+                    <form class="m-0"
+                          asp-area="Identity"
+                          asp-page="/Account/Logout"
+                          asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })"
+                          method="post">
+                        <button type="submit" class="btn usc-btn-logout">Cerrar Sesión</button>
+                    </form>
+                }
+                else
+                {
+                    <!-- Usuario NO autenticado -->
+                    <a class="btn usc-btn-logout" asp-area="Identity" asp-page="/Account/Login">
+                        Iniciar sesión
+                    </a>
+                }
+            </div>
+        </header>
+    }
 
 
     <div class="container">

@@ -1,0 +1,165 @@
+﻿/* FONDO PRINCIPAL */
+
+body {
+    background: linear-gradient( 180deg, rgba(0, 61, 165, 1) 0%, rgba(0, 45, 122, 1) 100% );
+}
+
+.inicio-de-sesion {
+    margin-top: 80px;
+    display: flex;
+    align-items: center; /* Centra vertical */
+    justify-content: center; /* Centra horizontal */
+    padding: 0 20px; /* Evita que se pegue en pantallas pequeñas */
+}
+
+
+/* CARD */
+.card.login-card {
+    border-radius: 14px;
+    border: 1px solid rgba(0,0,0,0.1);
+    width: 650px;
+    overflow: hidden;
+}
+
+/* HEADER */
+.card-header {
+    background: #fff;
+    text-align: center;
+    padding: 30px 20px 10px 20px;
+    position: relative;
+}
+
+.card-header img.login {
+    width: 96px;
+    height: 96px;
+    margin-bottom: 10px;
+}
+
+.sistema-de-gesti-n-de-salas {
+    font-size: 24px;
+    color: #003da5;
+    font-weight: 600;
+    text-align: center;
+}
+
+.universidad-santiago-de-cali {
+    font-size: 15px;
+    color: #717182;
+    text-align: center;
+    display: block;
+}
+
+/* FORM CONTENT */
+.card-content {
+    padding: 24px;
+}
+
+.primitive-label div {
+    font-size: 14px;
+    color: #0a0a0a;
+}
+
+
+
+/* INPUT WRAPPER */
+.input {
+    background: #f3f3f5;
+    border-radius: 8px;
+    padding: 6px 12px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    margin-top: 6px;
+}
+
+.input .form-control {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    height: 24px;
+    font-size: 14px;
+    color: #000 !important;
+}
+
+    .input .form-control::placeholder {
+        color: #717182;
+    }
+
+/* BOTÓN */
+.button,
+#login-submit {
+    width: 100%;
+    background: #003da5 !important;
+    border-radius: 8px;
+    height: 38px;
+    border: none;
+    margin-top: 6px;
+}
+
+    .button:hover,
+    #login-submit:hover {
+        background: #002f7a !important;
+    }
+
+.iniciar-sesi-n {
+    color: #fff;
+    text-align: center;
+    line-height: 36px;
+}
+
+/* RECORDAR */
+.form-check-input {
+    cursor: pointer;
+}
+
+/* DEMO USERS */
+.login4 {
+    background: #eff6ff;
+    border-radius: 10px;
+    border: 1px solid #bedbff;
+    padding: 16px;
+    font-size: 12px;
+    margin-top: 20px;
+}
+
+.usuarios-de-demostraci-n {
+    color: #003da5;
+    font-size: 14px;
+}
+
+.bold-text div,
+.bold-text2 div,
+.bold-text3 div {
+    font-weight: 700;
+    color: #4a5565;
+}
+
+.admin-usc-edu-co,
+.coord-usc-edu-co,
+.estudiante-usc-edu-co {
+    margin-left: 4px;
+    color: #4a5565;
+}
+
+/* Contenedor principal del formulario */
+.login3 {
+    padding: 0 20px; /* Espacio lateral */
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Espacio entre cada campo */
+}
+
+/* Contenedor individual (correo / contraseña) */
+.login3 .container {
+    width: 100%;
+}
+
+
+
+/* RESPONSIVE */
+@media (max-width: 500px) {
+    .card.login-card {
+        width: 90%;
+    }
+}
