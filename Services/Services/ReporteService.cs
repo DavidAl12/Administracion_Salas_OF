@@ -3,6 +3,7 @@ using Infrastructure; // Tu contexto AppDbContext
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace Services
 {
@@ -26,9 +27,21 @@ namespace Services
             return await _context.Reportes.ToListAsync();
         }
 
+        // Nuevo método para traer las relaciones Equipo y Sala
+        public async Task<IEnumerable<Reporte>> GetAllIncludingAsync()
+        {
+            return await _context.Reportes
+                .Include(r => r.Equipo)
+                .Include(r => r.Sala)
+                .ToListAsync();
+        }
+
         public async Task<Reporte> GetByIdAsync(int id)
         {
-            return await _context.Reportes.FirstOrDefaultAsync(r => r.Id == id);
+            return await _context.Reportes
+                .Include(r => r.Equipo)
+                .Include(r => r.Sala)
+                .FirstOrDefaultAsync(r => r.Id == id);
         }
 
         public async Task UpdateAsync(Reporte reporte)

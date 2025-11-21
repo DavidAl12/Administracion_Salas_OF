@@ -6,9 +6,10 @@ namespace Services
 {
     public interface IReporteService
     {
-        Task<IEnumerable<Reporte>> GetAllAsync();
-        Task<Reporte> GetByIdAsync(int id);
         Task AddAsync(Reporte reporte);
+        Task<IEnumerable<Reporte>> GetAllAsync();
+        Task<IEnumerable<Reporte>> GetAllIncludingAsync(); // <- Agregado aquí
+        Task<Reporte> GetByIdAsync(int id);
         Task UpdateAsync(Reporte reporte);
         Task DeleteAsync(int id);
     }

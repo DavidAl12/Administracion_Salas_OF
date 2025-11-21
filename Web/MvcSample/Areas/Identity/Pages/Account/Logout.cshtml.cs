@@ -1,11 +1,11 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Domain;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using Domain; // 🔹 AJUSTE: importa tu modelo de usuario
+using System;
+using System.Threading.Tasks;
 
 namespace MvcSample.Areas.Identity.Pages.Account
 {
@@ -20,13 +20,18 @@ namespace MvcSample.Areas.Identity.Pages.Account
             _logger = logger;
         }
 
-        // 🔹 AJUSTE: siempre redirige a la página de login después de logout
         public async Task<IActionResult> OnPost(string returnUrl = null)
         {
-            await _signInManager.SignOutAsync();
+            // Cierra sesión usando Identity y elimina cookies de autenticación
+            await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
+
+            // Elimina todas las cookies (incluyendo cookies persistentes de RememberMe)
+            foreach (var cookie in Request.Cookies.Keys)
+                Response.Cookies.Delete(cookie);
+
             _logger.LogInformation("User logged out.");
 
-            // Siempre redirige a la página de login
+            // Redirige siempre al login
             return RedirectToPage("/Account/Login", new { area = "Identity" });
         }
     }
