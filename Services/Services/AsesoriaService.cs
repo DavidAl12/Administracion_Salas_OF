@@ -1,5 +1,6 @@
 ﻿using Domain;
-using Infrastructure.Repositories;
+using Infrastructure; // Tu contexto AppDbContext
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -7,43 +8,43 @@ namespace Services
 {
     public class AsesoriaService : IAsesoriaService
     {
-        private readonly IRepository<Asesoria> _repo;
+        private readonly AppDbContext _context;
 
-        public AsesoriaService(IRepository<Asesoria> repo)
+        public AsesoriaService(AppDbContext context)
         {
-            _repo = repo;
-        }
-
-        public async Task AddAsync(Asesoria asesoria)
-        {
-            await _repo.AddAsync(asesoria);
-            await _repo.SaveChangesAsync();
-        }
-
-        public async Task DeleteAsync(int id)
-        {
-            var asesoria = await _repo.GetByIdAsync(id);
-            if (asesoria != null)
-            {
-                _repo.Remove(asesoria);
-                await _repo.SaveChangesAsync();
-            }
+            _context = context;
         }
 
         public async Task<IEnumerable<Asesoria>> GetAllAsync()
         {
-            return await _repo.GetAllAsync();
+            return await _context.Asesorias.ToListAsync(); // Ya disponible por el using
         }
 
         public async Task<Asesoria> GetByIdAsync(int id)
         {
-            return await _repo.GetByIdAsync(id);
+            return await _context.Asesorias.FirstOrDefaultAsync(a => a.Id == id);
+        }
+
+        public async Task AddAsync(Asesoria asesoria)
+        {
+            _context.Asesorias.Add(asesoria);
+            await _context.SaveChangesAsync();
         }
 
         public async Task UpdateAsync(Asesoria asesoria)
         {
-            _repo.Update(asesoria);
-            await _repo.SaveChangesAsync();
+            _context.Asesorias.Update(asesoria);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            var asesoria = await _context.Asesorias.FindAsync(id);
+            if (asesoria != null)
+            {
+                _context.Asesorias.Remove(asesoria);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

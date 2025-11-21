@@ -43,34 +43,34 @@
                         <span class="badge bg-dark">@s.Estado</span>
                     }
                 </td>
-
                 <td class="acciones">
                     <div class="acciones-contenido">
-                        <button class="btn btn-success btn-sm btn-accion"
-                                data-id="@s.SolicitudId"
-                                data-tipo="@s.Tipo"
-                                data-estado="Aprobado">
-                            Aprobar
-                        </button>
-                        <button class="btn btn-danger btn-sm btn-accion"
-                                data-id="@s.SolicitudId"
-                                data-tipo="@s.Tipo"
-                                data-estado="Rechazado">
-                            Rechazar
-                        </button>
+                        @if (s.Estado == "Pendiente")
+                        {
+                            <button class="btn btn-success btn-sm btn-accion"
+                                    data-id="@s.SolicitudId"
+                                    data-tipo="@s.Tipo"
+                                    data-estado="Aprobado">
+                                Aprobar
+                            </button>
+                            <button class="btn btn-danger btn-sm btn-accion"
+                                    data-id="@s.SolicitudId"
+                                    data-tipo="@s.Tipo"
+                                    data-estado="Rechazado">
+                                Rechazar
+                            </button>
+                        }
                     </div>
                 </td>
             </tr>
         }
-
     </tbody>
 </table>
 
 @section Scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        // Delegación para botones Aprobar/Rechazar
-                $(document).on("click", ".btn-accion", function () {
+        $(document).on("click", ".btn-accion", function () {
             var id = $(this).data("id");
             var tipo = $(this).data("tipo");
             var estado = $(this).data("estado");
@@ -81,15 +81,11 @@
                 data: { id: id, tipo: tipo, estado: estado },
                 success: function (response) {
                     if (response.success) {
-                                let badgeClass = "bg-secondary";
-                            if (response.nuevoEstado === "Aprobado") badgeClass = "bg-success";
-                            else if (response.nuevoEstado === "Rechazado") badgeClass = "bg-danger";
-
-                            $("#solicitud-" + id + " .estado").html(`<span class="badge ${badgeClass}">${response.nuevoEstado}</span>`);
-
-                        $("#solicitud-" + id + " .acciones .acciones-contenido").html(
-                            `<button class="btn btn-primary btn-sm btn-toggle" data-id="${id}" data-tipo="${tipo}">Acciones</button>`
-                        );
+                        let badgeClass = "bg-secondary";
+                        if (response.nuevoEstado === "Aprobado") badgeClass = "bg-success";
+                        else if (response.nuevoEstado === "Rechazado") badgeClass = "bg-danger";
+                        $("#solicitud-" + id + " .estado").html(`<span class="badge ${badgeClass}">${response.nuevoEstado}</span>`);
+                        $("#solicitud-" + id + " .acciones .acciones-contenido").html(""); // Oculta acciones después del cambio
                     }
                 },
                 error: function () {
@@ -97,20 +93,5 @@
                 }
             });
         });
-
-        $(document).on("click", ".btn-toggle", function () {
-            var id = $(this).data("id");
-            var tipo = $(this).data("tipo");
-
-            var botones = `
-                <button class="btn btn-success btn-sm btn-accion" data-id="${id}" data-tipo="${tipo}" data-estado="Aprobado">Aprobar</button>
-                <button class="btn btn-danger btn-sm btn-accion" data-id="${id}" data-tipo="${tipo}" data-estado="Rechazado">Rechazar</button>
-            `;
-
-            $("#solicitud-" + id + " .acciones .acciones-contenido").html(botones);
-            $("#solicitud-" + id + " .estado").html(`<span class="badge bg-secondary">Pendiente</span>`);
-
-        });
-
     </script>
 }

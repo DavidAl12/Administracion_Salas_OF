@@ -35,8 +35,11 @@ namespace MvcSample
             builder.Services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
             builder.Services.AddRepositories(_configuration);
 
+            // Obtener el connection string una sola vez
+            var connectionString = _configuration.GetConnectionString("DefaultConnection");
+
             // Servicios de dominio / aplicación (todos juntos en una extensión)
-            builder.Services.AddProjectServices();
+            builder.Services.AddProjectServices(connectionString); // <-- AJUSTE AQUÍ
 
             // AutoMapper
             var mappingConfiguration = new MapperConfiguration(m =>
