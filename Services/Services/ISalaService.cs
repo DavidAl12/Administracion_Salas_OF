@@ -1,19 +1,15 @@
-﻿using System;
+﻿using Domain;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-
-using Domain;
 
 namespace Services
 {
     public interface ISalaService
     {
-        Task<IEnumerable<Sala>> ObtenerTodasAsync();
-        Task<Sala> ObtenerPorIdAsync(int id);
-        Task CrearAsync(Sala sala);
-        Task ActualizarAsync(Sala sala);
-        Task EliminarAsync(int id);
+        Task<IEnumerable<Sala>> GetAllAsync();       // Listar todas
+        Task<Sala> GetByIdAsync(int id);            // Obtener por ID
+        Task AddAsync(Sala sala);                   // Crear
+        Task UpdateAsync(Sala sala);                // Editar
+        Task DeleteAsync(int id);                   // Eliminar
     }
 }

@@ -14,17 +14,14 @@ namespace MvcSample.Controllers
             _salaService = salaService;
         }
 
-        // LISTAR
         public async Task<IActionResult> Index()
         {
-            var salas = await _salaService.ObtenerTodasAsync();
+            var salas = await _salaService.GetAllAsync();
             return View(salas);
         }
 
-        // CREAR GET
         public IActionResult Create() => View();
 
-        // CREAR POST
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Sala sala)
@@ -35,22 +32,20 @@ namespace MvcSample.Controllers
             if (string.IsNullOrEmpty(sala.Responsable))
                 sala.Responsable = "-----";
 
-            await _salaService.CrearAsync(sala);
+            await _salaService.AddAsync(sala);
 
             return RedirectToAction(nameof(Index));
         }
 
-        // EDITAR GET
         public async Task<IActionResult> Edit(int id)
         {
-            var sala = await _salaService.ObtenerPorIdAsync(id);
+            var sala = await _salaService.GetByIdAsync(id);
             if (sala == null)
                 return NotFound();
 
             return View(sala);
         }
 
-        // EDITAR POST
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Sala sala)
@@ -61,26 +56,24 @@ namespace MvcSample.Controllers
             if (string.IsNullOrEmpty(sala.Responsable))
                 sala.Responsable = "-----";
 
-            await _salaService.ActualizarAsync(sala);
+            await _salaService.UpdateAsync(sala);
             return RedirectToAction(nameof(Index));
         }
 
-        // ELIMINAR GET
         public async Task<IActionResult> Delete(int id)
         {
-            var sala = await _salaService.ObtenerPorIdAsync(id);
+            var sala = await _salaService.GetByIdAsync(id);
             if (sala == null)
                 return NotFound();
 
             return View(sala);
         }
 
-        // ELIMINAR POST
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _salaService.EliminarAsync(id);
+            await _salaService.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
     }

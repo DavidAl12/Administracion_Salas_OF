@@ -1,7 +1,6 @@
 using AutoMapper;
 using Infrastructure;
 using Infrastructure.Repositories;
-using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Services;
 using Services.Automapper;
@@ -34,10 +33,13 @@ namespace MvcSample
             })
             .AddEntityFrameworkStores<AppDbContext>();
 
-            // REPOSITORIOS Y SERVICIOS
+            // REPOSITORIOS
             builder.Services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
+
+            // SERVICIOS
             builder.Services.AddScoped<ISalaService, SalaService>();
-            builder.Services.AddRepositories(_configuration);
+            builder.Services.AddScoped<IEquipoService, EquipoService>();
+            // Aquí puedes agregar los demás servicios: PrestamoEquipoService, PrestamoSalaService, AsesoriaService, ReporteService
 
             // AUTOMAPPER
             var mappingConfiguration = new MapperConfiguration(m =>
@@ -77,7 +79,7 @@ namespace MvcSample
             app.UseAuthorization();
             app.UseCors("CORS_Policy");
 
-            // 🔹 MUY IMPORTANTE: PÁGINA INICIAL = Home/Index
+            // PÁGINA INICIAL
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}"

@@ -2,35 +2,40 @@
 
 <h2 class="fw-bold mb-4">Editar Equipo</h2>
 
-<form method="post">
-
+<form asp-action="Edit" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
     <input type="hidden" asp-for="Id" />
-
-    <a class="btn btn-secondary mt-3" href="/Admin/Dashboard">Volver</a>
-
 
     <div class="mb-3">
         <label>Serial</label>
-        <input asp-for="Serial" class="form-control" required />
+        <input asp-for="Serial" class="form-control" />
+        <span asp-validation-for="Serial" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
         <label>Especificaciones</label>
-        <textarea asp-for="Especificaciones" class="form-control" required></textarea>
+        <textarea asp-for="Especificaciones" class="form-control"></textarea>
+        <span asp-validation-for="Especificaciones" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
         <label>Sala</label>
         <select asp-for="SalaId" class="form-control">
+            <option value="">-- Seleccione una sala --</option>
             @foreach (var sala in ViewBag.Salas)
             {
-                <option value="@sala.Id" selected="@(sala.Id == Model.SalaId)">
+                <option value="@sala.Id" selected="@(Model.SalaId == sala.Id ? "selected" : null)">
                     @sala.Nombre
                 </option>
             }
         </select>
+        <span asp-validation-for="SalaId" class="text-danger"></span>
     </div>
 
-    <button class="btn btn-warning">Actualizar</button>
-    <a class="btn btn-secondary" href="/Equipo">Volver</a>
+    <button type="submit" class="btn btn-primary">Actualizar</button>
+    <a class="btn btn-secondary" href="/Equipo/Index">Volver</a>
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
