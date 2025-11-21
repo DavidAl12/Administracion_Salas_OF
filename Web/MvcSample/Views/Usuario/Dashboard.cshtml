@@ -1,115 +1,110 @@
 ﻿@model Servicios.Models.UsuarioDashboardViewModel
 
-@{
-    ViewData["Title"] = "Panel de Usuario";
-}
+<link rel="stylesheet" href="~/css/dashboardUsuario.css" />
 
-<h1>@ViewData["Title"]</h1>
-<p>Consulta salas, solicita equipos y reporta incidencias</p>
+<div class="usc-dashboard container mt-4">
 
-<div class="row mb-4">
-    <div class="col-md-4">
-        <div class="card text-center">
-            <div class="card-header">Reservas Activas</div>
-            <div class="card-body">
-                <h2>@Model.ReservasActivas</h2>
-                <p>De @Model.TotalReservas reservas totales</p>
-            </div>
-        </div>
+    <!-- TÍTULO Y SUBTÍTULO -->
+    <div class="mb-4">
+        <h2 class="usc-title">Panel de Usuario</h2>
+        <p class="usc-subtitle">Consulta salas, solicita equipos y reporta incidencias</p>
     </div>
-    <div class="col-md-4">
-        <div class="card text-center border-warning">
-            <div class="card-header">Reportes Pendientes</div>
-            <div class="card-body">
-                <h2>@Model.ReportesPendientes</h2>
-                <p>De @Model.TotalReportes reportes totales</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card text-center">
-            <div class="card-header">Asesorías Pendientes</div>
-            <div class="card-body">
-                <h2>@Model.AsesoriasPendientes</h2>
-                <p>De @Model.TotalAsesorias solicitudes totales</p>
-            </div>
-        </div>
-    </div>
-</div>
 
-<div class="row mb-4">
-    <div class="col-md-3">
-        <div class="card text-center">
-            <div class="card-body">
-                <a class="btn btn-outline-primary w-100" asp-controller="Usuario" asp-action="ConsultarSalas">
-                    Consultar Salas
-                </a>
-                <p class="mt-2 mb-0">Ver estado de las salas</p>
-            </div>
-        </div>
+    <!-- NAV TABS -->
+    <div class="usc-tabs d-flex gap-2 mb-4">
+        <a class="usc-tab active"><i class="bi bi-house"></i> Inicio</a>
+        <a class="usc-tab" asp-controller="Usuario" asp-action="ConsultarSalas"><i class="bi bi-door-open"></i> Salas</a>
+        <a class="usc-tab" asp-controller="Usuario" asp-action="SolicitarRecursos"><i class="bi bi-plus-circle"></i> Solicitar</a>
+        <a class="usc-tab" asp-controller="Usuario" asp-action="MisReservas"><i class="bi bi-bookmark"></i> Mis Reservas</a>
+        <a class="usc-tab" asp-controller="Usuario" asp-action="ReportarDaño"><i class="bi bi-exclamation-circle"></i> Reportar</a>
+        <a class="usc-tab" asp-controller="Usuario" asp-action="SolicitarAsesoria"><i class="bi bi-chat-dots"></i> Asesoría</a>
     </div>
-    <div class="col-md-3">
-        <div class="card text-center">
-            <div class="card-body">
-                <a class="btn btn-outline-primary w-100" asp-controller="Usuario" asp-action="SolicitarRecursos">
-                    Solicitar Recursos
-                </a>
-                <p class="mt-2 mb-0">Reservar sala o equipo</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card text-center">
-            <div class="card-body">
-                <a class="btn btn-outline-warning w-100" asp-controller="Usuario" asp-action="ReportarDaño">
-                    Reportar Daño
-                </a>
-                <p class="mt-2 mb-0">Informar incidencias</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card text-center">
-            <div class="card-body">
-                <a class="btn btn-outline-info w-100" asp-controller="Usuario" asp-action="SolicitarAsesoria">
-                    Solicitar Asesoría
-                </a>
-                <p class="mt-2 mb-0">Ayuda técnica</p>
-            </div>
-        </div>
-    </div>
-</div>
 
-<div class="row mb-4">
-    <div class="col-md-3">
-        <div class="card text-center">
-            <div class="card-body">
-                <a class="btn btn-outline-primary w-100" asp-controller="Usuario" asp-action="MisReservas">
-                    Mis Reservas
-                </a>
-                <p class="mt-2 mb-0">Ver y gestionar reservas</p>
+    <!-- CARDS PRINCIPALES -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="usc-stat-card border-left-blue">
+                <p class="usc-stat-label">Reservas Activas</p>
+                <h2 class="usc-stat-number">@Model.ReservasActivas</h2>
+                <p class="usc-stat-sub">De @Model.TotalReservas reservas totales</p>
             </div>
         </div>
-    </div>
-</div>
 
-<div class="row">
-    <div class="col-md-6">
-        <div class="card text-center">
-            <div class="card-header">Equipos Disponibles</div>
-            <div class="card-body">
-                <h2>@Model.EquiposDisponibles</h2>
-                <p>De @Model.EquiposTotales equipos totales</p>
+        <div class="col-md-4">
+            <div class="usc-stat-card border-left-yellow">
+                <p class="usc-stat-label">Reportes Pendientes</p>
+                <h2 class="usc-stat-number">@Model.ReportesPendientes</h2>
+                <p class="usc-stat-sub">De @Model.TotalReportes reportes totales</p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="usc-stat-card border-left-lightblue">
+                <p class="usc-stat-label">Asesorías Pendientes</p>
+                <h2 class="usc-stat-number">@Model.AsesoriasPendientes</h2>
+                <p class="usc-stat-sub">De @Model.TotalAsesorias solicitudes totales</p>
             </div>
         </div>
     </div>
-    <div class="col-md-6">
-        <div class="card text-center">
-            <div class="card-header">Salas Disponibles</div>
-            <div class="card-body">
-                <h2>@Model.SalasDisponibles</h2>
-                <p>De @Model.SalasTotales salas totales</p>
+
+    <!-- ACCIONES RÁPIDAS -->
+    <div class="usc-card-large">
+        <h4 class="usc-large-title">Acciones Rápidas</h4>
+        <p class="usc-large-sub">Acciones principales disponibles para ti</p>
+
+        <div class="row g-3 mt-2">
+
+            <div class="col-md-4">
+                <a class="usc-option" asp-controller="Usuario" asp-action="ConsultarSalas">
+                    <i class="bi bi-geo-alt"></i>
+                    <div>
+                        <h5>Consultar Salas</h5>
+                        <p>Ver estado de las salas</p>
+                    </div>
+                </a>
             </div>
+
+            <div class="col-md-4">
+                <a class="usc-option" asp-controller="Usuario" asp-action="SolicitarRecursos">
+                    <i class="bi bi-pc-display"></i>
+                    <div>
+                        <h5>Solicitar Equipo</h5>
+                        <p>Reservar un equipo</p>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-4">
+                <a class="usc-option" asp-controller="Usuario" asp-action="ReportarDaño">
+                    <i class="bi bi-exclamation-octagon"></i>
+                    <div>
+                        <h5>Reportar Daño</h5>
+                        <p>Informar incidencias</p>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-4">
+                <a class="usc-option" asp-controller="Usuario" asp-action="SolicitarAsesoria">
+                    <i class="bi bi-chat-dots"></i>
+                    <div>
+                        <h5>Solicitar Asesoría</h5>
+                        <p>Ayuda técnica</p>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-4">
+                <a class="usc-option" asp-controller="Usuario" asp-action="MisReservas">
+                    <i class="bi bi-journal-check"></i>
+                    <div>
+                        <h5>Mis Reservas</h5>
+                        <p>Ver y gestionar reservas</p>
+                    </div>
+                </a>
+            </div>
+
         </div>
     </div>
+
 </div>

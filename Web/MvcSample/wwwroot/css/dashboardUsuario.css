@@ -1,0 +1,122 @@
+﻿/* Contenedor general */
+.usc-dashboard {
+    background: #f9fafb;
+    padding: 30px;
+    border-radius: 14px;
+}
+
+/* Títulos */
+.usc-title {
+    color: #003da5;
+    font-size: 26px;
+    font-weight: 600;
+}
+
+.usc-subtitle {
+    color: #4a5568;
+    font-size: 16px;
+}
+
+/* Tabs USC */
+.usc-tabs {
+    background: #e5e7eb;
+    padding: 4px;
+    border-radius: 12px;
+}
+
+.usc-tab {
+    padding: 8px 16px;
+    border-radius: 12px;
+    background: transparent;
+    color: #0a0a0a;
+    cursor: pointer;
+    font-size: 15px;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+    .usc-tab.active {
+        background: #003da5;
+        color: white !important;
+    }
+
+/* CARDS ESTADÍSTICAS */
+.usc-stat-card {
+    background: white;
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border-left: 5px solid transparent;
+}
+
+.border-left-blue {
+    border-left-color: #003da5;
+}
+
+.border-left-yellow {
+    border-left-color: #f0b100;
+}
+
+.border-left-lightblue {
+    border-left-color: #2b7fff;
+}
+
+.usc-stat-label {
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.usc-stat-number {
+    color: #003da5;
+    font-size: 34px;
+    font-weight: 600;
+}
+
+.usc-stat-sub {
+    color: #4a5568;
+    font-size: 14px;
+}
+
+/* ACCIONES RÁPIDAS */
+.usc-card-large {
+    background: #fff;
+    padding: 25px;
+    border-radius: 14px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+
+.usc-large-title {
+    color: #003da5;
+    font-size: 18px;
+}
+
+.usc-large-sub {
+    color: #6b7280;
+}
+
+.usc-option {
+    display: flex;
+    gap: 12px;
+    padding: 15px;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    text-decoration: none;
+    color: #003da5;
+    transition: 0.2s;
+}
+
+    .usc-option p {
+        margin: 0;
+        color: #4a5568;
+    }
+
+    .usc-option:hover {
+        background: #f3f4f6;
+        transform: translateY(-2px);
+    }
+
+    .usc-option i {
+        font-size: 32px;
+        color: #003da5;
+    }
