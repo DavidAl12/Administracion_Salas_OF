@@ -3,77 +3,126 @@
     ViewData["Title"] = "Panel de Coordinación";
 }
 
-<h1>@ViewData["Title"]</h1>
-<p>Gestiona equipos, reservas y reportes de las salas</p>
+<link rel="stylesheet" href="~/css/dashboardAdmin.css" />
 
-<div class="row mb-3">
-    <div class="col-md-3">
-        <div class="card text-center">
-            <div class="card-body">
-                <div>Equipos Disponibles</div>
-                <h2>@Model.EquiposDisponibles</h2>
-                <p>De @Model.EquiposTotales equipos totales</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card text-center border-warning">
-            <div class="card-body">
-                <div>Solicitudes Pendientes</div>
-                <h2>@Model.SolicitudesPendientes</h2>
-                <p>Requieren aprobación</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card text-center border-danger">
-            <div class="card-body">
-                <div>Reportes de Daños</div>
-                <h2>@Model.ReportesPendientes</h2>
-                <p>Sin resolver</p>
-            </div>
-        </div>
-    </div>
-</div>
+<div class="usc-dashboard container mt-4">
 
-<h3>Acceso Rápido</h3>
-<div class="row mt-3">
-    <div class="col-md-4">
-        <div class="card card-body">
-            <a asp-action="Equipos" class="btn btn-outline-primary w-100">Gestionar Equipos</a>
-            <div>Asignar, bloquear y liberar</div>
-        </div>
+    <!-- TÍTULO PRINCIPAL -->
+    <div class="mb-4 text-center">
+        <h2 class="usc-title-primary">Panel de Coordinación</h2>
+        <p class="usc-subtitle-primary">Gestiona equipos, reservas y reportes de salas</p>
     </div>
-    <div class="col-md-4">
-        <div class="card card-body">
-            <a asp-action="Solicitudes" class="btn btn-outline-primary w-100">Revisar Solicitudes</a>
-            <div>Aprobar o rechazar préstamos</div>
+
+    <<!-- PESTAÑAS -->
+    <ul class="nav usc-tabs justify-content-center mb-4">
+        <li class="nav-item">
+            <a class="nav-link usc-tab-item active" href="#">Resumen</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link usc-tab-item" asp-action="Equipos">Equipos</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link usc-tab-item" asp-action="Solicitudes">Solicitudes</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link usc-tab-item" asp-action="Reportes">Reportes</a>
+        </li>
+
+        <!-- NUEVAS PESTAÑAS -->
+        <li class="nav-item">
+            <a class="nav-link usc-tab-item" asp-action="Ocupacion">Ocupación</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link usc-tab-item" asp-action="Informes">Informes</a>
+        </li>
+    </ul>
+
+
+    <!-- TARJETAS ESTADÍSTICAS -->
+    <div class="row g-4">
+
+        <div class="col-md-4">
+            <div class="usc-card card shadow-sm p-3 border-start-usc">
+                <h5 class="usc-card-title">Equipos Disponibles</h5>
+                <h2 class="usc-card-number">@Model.EquiposDisponibles</h2>
+                <small class="usc-card-desc">De @Model.EquiposTotales equipos totales</small>
+            </div>
         </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card card-body">
-            <a asp-action="Ocupacion" class="btn btn-outline-primary w-100">Ver Ocupación</a>
-            <div>Estado de salas diario y semanal</div>
+
+        <div class="col-md-4">
+            <div class="usc-card card shadow-sm p-3 border-start-usc">
+                <h5 class="usc-card-title">Solicitudes Pendientes</h5>
+                <h2 class="usc-card-number">@Model.SolicitudesPendientes</h2>
+                <small class="usc-card-desc">Requieren aprobación</small>
+            </div>
         </div>
-    </div>
-</div>
-<div class="row mt-3">
-    <div class="col-md-4">
-        <div class="card card-body">
-            <a asp-action="Reportes" class="btn btn-outline-warning w-100">Atender Reportes</a>
-            <div>Daños en equipos y salas</div>
+
+        <div class="col-md-4">
+            <div class="usc-card card shadow-sm p-3 border-start-usc">
+                <h5 class="usc-card-title">Reportes de Daños</h5>
+                <h2 class="usc-card-number">@Model.ReportesPendientes</h2>
+                <small class="usc-card-desc">Sin resolver</small>
+            </div>
         </div>
+
     </div>
-    <div class="col-md-4">
-        <div class="card card-body">
-            <a asp-action="Informes" class="btn btn-outline-info w-100">Generar Informes</a>
-            <div>Disponibilidad y estado</div>
+
+    <!-- ACCESO RÁPIDO -->
+    <div class="mt-5">
+        <h4 class="usc-title-secondary">Acceso Rápido</h4>
+        <p class="usc-subtitle-secondary">Acciones principales del coordinador</p>
+
+        <div class="row g-4">
+
+            <div class="col-md-4">
+                <a asp-action="Equipos" class="text-decoration-none">
+                    <div class="usc-quick-card card p-4 shadow-sm">
+                        <h5 class="usc-quick-title">Gestionar Equipos</h5>
+                        <small class="usc-quick-desc">Asignar, bloquear y liberar</small>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-4">
+                <a asp-action="Solicitudes" class="text-decoration-none">
+                    <div class="usc-quick-card card p-4 shadow-sm">
+                        <h5 class="usc-quick-title">Revisar Solicitudes</h5>
+                        <small class="usc-quick-desc">Aprobar o rechazar préstamos</small>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-4">
+                <a asp-action="Ocupacion" class="text-decoration-none">
+                    <div class="usc-quick-card card p-4 shadow-sm">
+                        <h5 class="usc-quick-title">Ver Ocupación</h5>
+                        <small class="usc-quick-desc">Estado diario y semanal</small>
+                    </div>
+                </a>
+            </div>
+
         </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card card-body">
-            <a asp-action="Asesorias" class="btn btn-outline-secondary w-100">Gestionar Asesorías</a>
-            <div>Ver y gestionar solicitudes de asesoría técnica</div>
+
+        <div class="row g-4 mt-3">
+            <div class="col-md-4">
+                <a asp-action="Reportes" class="text-decoration-none">
+                    <div class="usc-quick-card card p-4 shadow-sm">
+                        <h5 class="usc-quick-title">Atender Reportes</h5>
+                        <small class="usc-quick-desc">Daños en salas o equipos</small>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-4">
+                <a asp-action="Informes" class="text-decoration-none">
+                    <div class="usc-quick-card card p-4 shadow-sm">
+                        <h5 class="usc-quick-title">Generar Informes</h5>
+                        <small class="usc-quick-desc">Disponibilidad y estado</small>
+                    </div>
+                </a>
+            </div>
         </div>
+
     </div>
+
 </div>
