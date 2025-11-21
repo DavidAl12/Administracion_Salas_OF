@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class salaass : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -278,13 +278,13 @@ namespace Infrastructure.Migrations
                         column: x => x.UsuarioId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_PrestamosEquipo_Equipos_EquipoId",
                         column: x => x.EquipoId,
                         principalTable: "Equipos",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -299,7 +299,8 @@ namespace Infrastructure.Migrations
                     Fecha = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UsuarioId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     EquipoId = table.Column<int>(type: "int", nullable: true),
-                    SalaId = table.Column<int>(type: "int", nullable: true)
+                    SalaId = table.Column<int>(type: "int", nullable: true),
+                    SalaId1 = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -309,15 +310,22 @@ namespace Infrastructure.Migrations
                         column: x => x.UsuarioId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Reportes_Equipos_EquipoId",
                         column: x => x.EquipoId,
                         principalTable: "Equipos",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Reportes_Salas_SalaId",
                         column: x => x.SalaId,
+                        principalTable: "Salas",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_Reportes_Salas_SalaId1",
+                        column: x => x.SalaId1,
                         principalTable: "Salas",
                         principalColumn: "Id");
                 });
@@ -405,6 +413,11 @@ namespace Infrastructure.Migrations
                 name: "IX_Reportes_SalaId",
                 table: "Reportes",
                 column: "SalaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reportes_SalaId1",
+                table: "Reportes",
+                column: "SalaId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reportes_UsuarioId",

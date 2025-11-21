@@ -1,102 +1,88 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Infrastructure;
-using Microsoft.EntityFrameworkCore;
-using Domain;
+﻿using Domain;
+using Microsoft.AspNetCore.Mvc;
+using Services;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace MvcSample.Controllers
 {
     public class EquipoController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly IEquipoService _equipoService;
+        private readonly ISalaService _salaService;
 
-        public EquipoController(AppDbContext context)
+        public EquipoController(IEquipoService equipoService, ISalaService salaService)
         {
-            _context = context;
+            _equipoService = equipoService;
+            _salaService = salaService;
         }
 
-        // LISTAR
         public async Task<IActionResult> Index()
         {
-            var equipos = await _context.Equipos.Include(x => x.Sala).ToListAsync();
+            var equipos = await _equipoService.GetAllAsync();
             return View(equipos);
         }
 
-        // CREAR GET
         public async Task<IActionResult> Create()
         {
-            ViewBag.Salas = await _context.Salas.ToListAsync();
+            var salas = await _salaService.GetAllAsync();
+            ViewBag.Salas = new SelectList(salas, "Id", "Nombre");
             return View();
         }
 
-        // CREAR POST
         [HttpPost]
-        public async Task<IActionResult> Create(Equipo eq)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Equipo equipo)
         {
             if (!ModelState.IsValid)
             {
-                ViewBag.Salas = await _context.Salas.ToListAsync();
-                return View(eq);
+                var salas = await _salaService.GetAllAsync();
+                ViewBag.Salas = new SelectList(salas, "Id", "Nombre");
+                return View(equipo);
             }
 
-            _context.Equipos.Add(eq);
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction("Index");
+            await _equipoService.AddAsync(equipo);
+            return RedirectToAction(nameof(Index));
         }
 
-        // EDITAR GET
         public async Task<IActionResult> Edit(int id)
         {
-            var eq = await _context.Equipos.FindAsync(id);
+            var equipo = await _equipoService.GetByIdAsync(id);
+            if (equipo == null) return NotFound();
 
-            if (eq == null)
-                return NotFound();
-
-            ViewBag.Salas = await _context.Salas.ToListAsync();
-            return View(eq);
+            var salas = await _salaService.GetAllAsync();
+            ViewBag.Salas = new SelectList(salas, "Id", "Nombre", equipo.SalaId);
+            return View(equipo);
         }
 
-        // EDITAR POST
         [HttpPost]
-        public async Task<IActionResult> Edit(Equipo eq)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Equipo equipo)
         {
             if (!ModelState.IsValid)
             {
-                ViewBag.Salas = await _context.Salas.ToListAsync();
-                return View(eq);
+                var salas = await _salaService.GetAllAsync();
+                ViewBag.Salas = new SelectList(salas, "Id", "Nombre", equipo.SalaId);
+                return View(equipo);
             }
 
-            _context.Equipos.Update(eq);
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction("Index");
+            await _equipoService.UpdateAsync(equipo);
+            return RedirectToAction(nameof(Index));
         }
 
-        // ELIMINAR GET
         public async Task<IActionResult> Delete(int id)
         {
-            var eq = await _context.Equipos.Include(x => x.Sala).FirstOrDefaultAsync(x => x.Id == id);
-
-            if (eq == null)
-                return NotFound();
-
-            return View(eq);
+            var equipo = await _equipoService.GetByIdAsync(id);
+            if (equipo == null) return NotFound();
+            return View(equipo);
         }
 
-        // ELIMINAR POST
         [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var eq = await _context.Equipos.FindAsync(id);
-
-            if (eq == null)
-                return NotFound();
-
-            _context.Equipos.Remove(eq);
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction("Index");
+            await _equipoService.DeleteAsync(id);
+            return RedirectToAction(nameof(Index));
         }
     }
 }

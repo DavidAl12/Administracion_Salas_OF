@@ -22,21 +22,7 @@ namespace Infrastructure
         {
             base.OnModelCreating(modelBuilder);
 
-            // Relación Usuario-Asesorias (Solicitante)
-            modelBuilder.Entity<Asesoria>()
-                .HasOne(a => a.Usuario)
-                .WithMany(u => u.Asesorias)
-                .HasForeignKey(a => a.UsuarioId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            // Relación Usuario-Asesorias (Coordinador)
-            modelBuilder.Entity<Asesoria>()
-                .HasOne(a => a.Coordinador)
-                .WithMany()
-                .HasForeignKey(a => a.CoordinadorId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            // Relación Equipo-Sala con DeleteBehavior.SetNull
+            // Equipo - Sala (SetNull)
             modelBuilder.Entity<Equipo>()
                 .HasOne(e => e.Sala)
                 .WithMany(s => s.Equipos)
@@ -57,7 +43,54 @@ namespace Infrastructure
                 .HasForeignKey(p => p.UsuarioId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Agrega configuraciones adicionales si hay más relaciones
+            // PrestamoEquipo - Equipo
+            modelBuilder.Entity<PrestamoEquipo>()
+                .HasOne(p => p.Equipo)
+                .WithMany()
+                .HasForeignKey(p => p.EquipoId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // PrestamoEquipo - Usuario
+            modelBuilder.Entity<PrestamoEquipo>()
+                .HasOne(p => p.Usuario)
+                .WithMany(u => u.PrestamosEquipo)
+                .HasForeignKey(p => p.UsuarioId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Asesoria - Usuario
+            modelBuilder.Entity<Asesoria>()
+                .HasOne(a => a.Usuario)
+                .WithMany(u => u.Asesorias)
+                .HasForeignKey(a => a.UsuarioId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Asesoria - Coordinador
+            modelBuilder.Entity<Asesoria>()
+                .HasOne(a => a.Coordinador)
+                .WithMany()
+                .HasForeignKey(a => a.CoordinadorId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Reporte - Usuario
+            modelBuilder.Entity<Reporte>()
+                .HasOne(r => r.Usuario)
+                .WithMany(u => u.Reportes)
+                .HasForeignKey(r => r.UsuarioId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Reporte - Equipo (opcional)
+            modelBuilder.Entity<Reporte>()
+                .HasOne(r => r.Equipo)
+                .WithMany()
+                .HasForeignKey(r => r.EquipoId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            // Reporte - Sala (opcional)
+            modelBuilder.Entity<Reporte>()
+                .HasOne(r => r.Sala)
+                .WithMany()
+                .HasForeignKey(r => r.SalaId)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

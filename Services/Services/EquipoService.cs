@@ -5,43 +5,43 @@ using System.Threading.Tasks;
 
 namespace Services
 {
-    public class SalaService : ISalaService
+    public class EquipoService : IEquipoService
     {
-        private readonly IRepository<Sala> _repo;
+        private readonly IRepository<Equipo> _repo;
 
-        public SalaService(IRepository<Sala> repo)
+        public EquipoService(IRepository<Equipo> repo)
         {
             _repo = repo;
         }
 
-        public async Task<IEnumerable<Sala>> GetAllAsync()
+        public async Task<IEnumerable<Equipo>> GetAllAsync()
         {
             return await _repo.GetAllAsync();
         }
 
-        public async Task<Sala> GetByIdAsync(int id)
+        public async Task<Equipo> GetByIdAsync(int id)
         {
             return await _repo.GetByIdAsync(id);
         }
 
-        public async Task AddAsync(Sala sala)
+        public async Task AddAsync(Equipo equipo)
         {
-            await _repo.AddAsync(sala);
+            await _repo.AddAsync(equipo);
             await _repo.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(Sala sala)
+        public async Task UpdateAsync(Equipo equipo)
         {
-            _repo.Update(sala);
+            _repo.Update(equipo);
             await _repo.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(int id)
         {
-            var sala = await _repo.GetByIdAsync(id);
-            if (sala != null)
+            var equipo = await _repo.GetByIdAsync(id);
+            if (equipo != null)
             {
-                _repo.Remove(sala);
+                _repo.Remove(equipo);
                 await _repo.SaveChangesAsync();
             }
         }
